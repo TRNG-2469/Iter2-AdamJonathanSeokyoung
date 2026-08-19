@@ -1,0 +1,9 @@
+
+Reimbursements
+/api/reimbursements/{id}
+/api/reimbursements/history?
+/api/users/
+
+AUTH
+/api/auth/login
+/api/auth/logout
