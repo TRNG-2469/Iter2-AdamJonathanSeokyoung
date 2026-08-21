@@ -41,13 +41,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Logging -->
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>1.5.6</version>
-        </dependency>
-
         <!-- Testing dependencies -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>

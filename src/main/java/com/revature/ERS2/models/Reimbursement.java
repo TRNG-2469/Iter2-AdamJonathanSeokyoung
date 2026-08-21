@@ -1,122 +1,48 @@
 package com.revature.ERS2.models;
 
+import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "reimbursements")
+@Data
+@NoArgsConstructor
 public class Reimbursement {
 
-    //Change to long?
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-    //Store the actual Author object?
-    private int authorId;
-    private Integer resolverId;
-
+    @ManyToOne(fetch = FetchType.LAZY) // Lazy loading optimizes database queries
+    @JoinColumn(name = "author_id", nullable = false)
+    private User author;
+    @ManyToOne(fetch = FetchType.LAZY) // Lazy loading optimizes database queries
+    @JoinColumn(name = "resolver_id")
+    private User resolver;
+    @DecimalMin(value = "0.01", message = "Amount must be a positive value")
+    @DecimalMax(value = "999999.00", message = "Amount must be less than or equal to 999999.00")
+    @NotNull(message = "Amount is required")
     private BigDecimal amount;
-
+    @Enumerated(EnumType.STRING)
+    @NotNull(message = "Status is required")
     private ReimbursementStatus status;
+    @Enumerated(EnumType.STRING)
+    @NotNull(message = "Type is required")
     private ReimbursementType type;
-
+    @Size(max = 255, message = "Description must be less than or equal to 255 characters")
     private String description;
+    @NotNull(message = "Submitted at is required")
     private LocalDateTime submittedAt;
     private LocalDateTime resolvedAt;
-
-    public Reimbursement() {
-    }
-
-    public Reimbursement(int reimbursementId, int authorId, BigDecimal amount, ReimbursementStatus status,
-                         ReimbursementType type, String description, LocalDateTime submittedAt, LocalDateTime resolvedAt,
-                         Integer resolverId){
-        this(authorId, amount, status, type, description, submittedAt, resolvedAt, resolverId);
-        this.id = reimbursementId;
-    }
-
-    // constructor for creating reimbursements (auto generate id)
-    public Reimbursement(int authorId, BigDecimal amount, ReimbursementStatus status, ReimbursementType type,
-                         String description, LocalDateTime submittedAt, LocalDateTime resolvedAt, Integer resolverId) {
-        this.authorId = authorId;
-        this.amount = amount;
-        this.status = status;
-        this.type = type;
-        this.description = description;
-        this.submittedAt = submittedAt;
-        this.resolvedAt = resolvedAt;
-        this.resolverId = resolverId;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getAuthorId() { return authorId;}
-
-    public void setAuthorId(int authorId) { this.authorId = authorId; }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
-
-    public ReimbursementStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(ReimbursementStatus status) {
-        this.status = status;
-    }
-
-    public ReimbursementType getType() {
-        return type;
-    }
-
-    public void setType(ReimbursementType type) {
-        this.type = type;
-    }
-
-    public LocalDateTime getSubmittedAt() { return submittedAt; }
-
-    public void setSubmittedAt(LocalDateTime submittedAt) { this.submittedAt = submittedAt; }
-
-    public LocalDateTime getResolvedAt() { return resolvedAt; }
-
-    public void setResolvedAt(LocalDateTime resolvedAt) { this.resolvedAt = resolvedAt; }
-
-    public Integer getResolverId() {
-        return resolverId;
-    }
-
-    public void setResolverId(Integer resolverId) {
-        this.resolverId = resolverId;
-    }
-
-    @Override
-    public String toString() {
-        return "Reimbursement{" +
-                "id=" + id +
-                ", authorId=" + authorId +
-                ", amount=" + amount +
-                ", status='" + status.toString() + '\'' +
-                ", status='" + type.toString() + '\'' +
-                ", description='" + description + '\'' +
-                ", submittedAt=" + submittedAt +
-                ", resolvedAt=" + resolvedAt +
-                '}';
-    }
 }
 
 
