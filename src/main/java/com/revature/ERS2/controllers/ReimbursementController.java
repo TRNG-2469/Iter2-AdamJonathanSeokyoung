@@ -23,6 +23,22 @@ public class ReimbursementController {
     }
 
     @GetMapping("/reimbursements")
+    public List<Reimbursement> getAllReimbursements(){
+        return reimbursementService.getAllReimbursements();
+    }
+
+    @GetMapping("/reimbursements/{id}")
+    public Reimbursement getReimbursementById(int id){
+        return reimbursementService.getReimbursementById(id);
+    }
+
+    @GetMapping("/reimbursements/history")
+    public List<Reimbursement> getReimbursementHistory(){
+        return reimbursementService.getReimbursementHistory();
+    }
+
+
+    @GetMapping("/reimbursements")
     public ResponseEntity<List<Reimbursement>> getReimbursements(@RequestParam(required = false) ReimbursementStatus status,
                                                                  @RequestParam(required = false) Integer departmentId) {
 

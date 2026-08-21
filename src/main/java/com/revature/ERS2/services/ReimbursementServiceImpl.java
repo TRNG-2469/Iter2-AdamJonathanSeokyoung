@@ -1,11 +1,13 @@
 package com.revature.ERS2.services;
 
+import com.revature.ERS2.exceptions.ReimbursementNotFoundException;
 import com.revature.ERS2.models.Reimbursement;
 import com.revature.ERS2.models.ReimbursementStatus;
 import com.revature.ERS2.repositories.ReimbursementRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 @Service
 public class ReimbursementServiceImpl implements ReimbursementService {
@@ -19,17 +21,22 @@ public class ReimbursementServiceImpl implements ReimbursementService {
 
     @Override
     public List<Reimbursement> getAllReimbursements() {
-        return List.of();
+        return reimbursementRepository.findAll();
     }
 
     @Override
     public Reimbursement getReimbursementById(int reimbursementID) {
-        return null;
+        return reimbursementRepository.findById(reimbursementID)
+                .orElseThrow(() -> new ReimbursementNotFoundException(reimbursementID));
     }
 
     @Override
     public List<Reimbursement> getReimbursementHistory() {
-        return List.of();
+        List<Reimbursement> approved = getReimbursementsByStatus(ReimbursementStatus.APPROVED);
+        List<Reimbursement> denied = getReimbursementsByStatus(ReimbursementStatus.DENIED);
+        return Stream.of(approved, denied)
+                .flatMap(List::stream)
+                .toList();
     }
 
     @Override
