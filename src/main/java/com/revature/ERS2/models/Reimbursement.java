@@ -4,7 +4,11 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class Reimbursement {
+
+    //Change to long?
     private int id;
+
+    //Store the actual Author object?
     private int authorId;
     private Integer resolverId;
 

@@ -15,7 +15,7 @@ public interface UserService {
     User getUserByDepartment(int departmentId);
 
     //TODO: Seoky DML
-    void createUser(User u);
+    User createUser(User u);
 
     //Update role?
     //Delete user?
