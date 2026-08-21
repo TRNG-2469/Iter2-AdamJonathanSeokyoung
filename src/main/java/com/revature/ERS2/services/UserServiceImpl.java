@@ -4,6 +4,8 @@ import com.revature.ERS2.models.User;
 import com.revature.ERS2.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -15,12 +17,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserById(int userId) {
-        return null;
+        return userRepository.findById(userId).orElse(null);
     }
 
     @Override
     public User getUserByUsername(String username) {
-        return null;
+        return userRepository.findByUsername(username);
     }
 
     @Override
