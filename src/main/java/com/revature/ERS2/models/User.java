@@ -1,123 +1,41 @@
 package com.revature.ERS2.models;
 
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Table(name = "users")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
 
 
-    //id to Long?
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    @NotBlank(message = "Last Name is mandatory")
+    @Size(max = 50, message = "Last Name must be less than 50 characters")
     private String lastName;
+    @NotBlank(message = "First Name is mandatory")
+    @Size(max = 50, message = "First Name must be less than 50 characters")
     private String firstName;
+    @NotBlank(message = "Username is mandatory")
+    @Size(max = 30, message = "Username must be less than 30 characters")
     private String username;
-
+    @NotBlank(message = "Password is mandatory")
     private String password;
-
-    private String email;
+    //need to figure out how to do enum constraints
+    @Enumerated(EnumType.STRING)
+    @NotNull
     private Role role;
 
-    //Store the actual department instead of id? 
-    private int departmentId;
-
-    public User() {
-
-    }
-
-    public int getDepartmentId() {
-        return departmentId;
-    }
-
-    public void setDepartmentId(int departmentId) {
-        this.departmentId = departmentId;
-    }
-
-    public User(String firstName, String lastName, String username, String password, String email, Role role, int departmentId) {
-        this.lastName = lastName;
-        this.firstName = firstName;
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.role = role;
-        this.departmentId = departmentId;
-    }
-
-    public User(int id, String firstName, String lastName, String username, String password, String email,
-                Role role, int departmentId) {
-        this.id = id;
-        this.lastName = lastName;
-        this.firstName = firstName;
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.role = role;
-        this.departmentId = departmentId;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", username='" + username + '\'' +
-                ", email='" + email + '\'' +
-                ", role=" + role +
-                ", departmentId=" + departmentId +
-                '}';
-    }
-
+    @ManyToOne(fetch = FetchType.LAZY) // Lazy loading optimizes database queries
+    @JoinColumn(name = "department_id", nullable = false)
+    private Department department;
 }
