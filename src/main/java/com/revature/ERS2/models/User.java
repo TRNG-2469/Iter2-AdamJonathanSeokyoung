@@ -2,6 +2,8 @@ package com.revature.ERS2.models;
 
 public class User {
 
+
+    //id to Long?
     private int id;
     private String lastName;
     private String firstName;
@@ -11,6 +13,8 @@ public class User {
 
     private String email;
     private Role role;
+
+    //Store the actual department instead of id? 
     private int departmentId;
 
     public User() {

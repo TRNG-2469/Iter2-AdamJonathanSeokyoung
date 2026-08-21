@@ -14,10 +14,14 @@ public interface ReimbursementService {
 
     //TODO: Rest seoky
     //Status or department, or both
-    List<Reimbursement> getReimbursementByCondition(ReimbursementStatus status, Integer departmentId);
+    //For branching
+    List<Reimbursement> getReimbursements(ReimbursementStatus status, Integer departmentId);
 
-    List<Reimbursement> getReimbursementByAuthor(int authorId);
-    List<Reimbursement> getAuthorReimbursementsByStatus(int authorId, ReimbursementStatus status);
+    List<Reimbursement> getReimbursementsByStatus(ReimbursementStatus status);
+    List<Reimbursement> getReimbursementsByDepartment(Integer departmentId);
+    List<Reimbursement> getReimbursementsByStatusAndDepartment(ReimbursementStatus status, Integer departmentId);
+    List<Reimbursement> getReimbursementsByAuthor(int authorId);
+    List<Reimbursement> getReimbursementsByAuthorAndStatus(int authorId, ReimbursementStatus status);
 
     //TODO: Adam
     void createReimbursement(Reimbursement r, int authorId);
