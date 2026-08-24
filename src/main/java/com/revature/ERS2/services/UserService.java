@@ -9,7 +9,7 @@ public interface UserService {
     /*User login(String username, String password); */
 
     //TODO: ADAM
-    User getUserById(int userId);
+    User getUserById(Integer userId);
     User getUserByUsername(String username);
 
     //TODO: jonathan

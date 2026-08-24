@@ -20,9 +20,11 @@ public class UserServiceImpl implements UserService {
     public List<User> getAllUsers(){
         return userRepository.findAll();
     }
+
+    //Changed to integer because of model, could change to long again if needed
     @Override
-    public User getUserById(int userId) {
-        return userRepository.findById((long) userId)
+    public User getUserById(Integer userId) {
+        return userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
     }
 
