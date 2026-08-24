@@ -3,10 +3,12 @@ package com.revature.ERS2.services;
 import com.revature.ERS2.exceptions.ReimbursementNotFoundException;
 import com.revature.ERS2.models.Reimbursement;
 import com.revature.ERS2.models.ReimbursementStatus;
+import com.revature.ERS2.models.User;
 import com.revature.ERS2.repositories.ReimbursementRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 @Service
@@ -97,22 +99,42 @@ public class ReimbursementServiceImpl implements ReimbursementService {
     }
 
     @Override
-    public void createReimbursement(Reimbursement r, int authorId) {
-
+    public void createReimbursement(Reimbursement r, User author) {
+        if (Objects.equals(author.getId(), r.getAuthor().getId())) {
+            reimbursementRepository.save(r);
+        }
     }
 
     @Override
     public void updateReimbursement(Reimbursement r) {
-
+        Reimbursement existingReimbursement = reimbursementRepository.findById(r.getId()).orElse(null);
+        if (existingReimbursement != null) {
+            existingReimbursement.setAuthor(r.getAuthor());
+            existingReimbursement.setResolver(r.getResolver());
+            existingReimbursement.setAmount(r.getAmount());
+            existingReimbursement.setStatus(r.getStatus());
+            existingReimbursement.setType(r.getType());
+            existingReimbursement.setDescription(r.getDescription());
+            existingReimbursement.setSubmittedAt(r.getSubmittedAt());
+            existingReimbursement.setResolvedAt(r.getResolvedAt());
+            reimbursementRepository.save(existingReimbursement);
+        }
     }
 
     @Override
     public void deleteReimbursement(int reimbursementID) {
-
+        if (reimbursementRepository.existsById(reimbursementID)){
+            reimbursementRepository.deleteById(reimbursementID);
+        }
     }
 
     @Override
-    public void resolveReimbursement(int resolverId, int reimbursementId, ReimbursementStatus status) {
-
+    public void resolveReimbursement(User resolver, int reimbursementId, ReimbursementStatus status) {
+        Reimbursement existingReimbursement = reimbursementRepository.findById(reimbursementId).orElse(null);
+        if (existingReimbursement != null) {
+            existingReimbursement.setResolver(resolver);
+            existingReimbursement.setStatus(status);
+            reimbursementRepository.save(existingReimbursement);
+        }
     }
 }

@@ -2,6 +2,7 @@ package com.revature.ERS2.services;
 
 import com.revature.ERS2.models.Reimbursement;
 import com.revature.ERS2.models.ReimbursementStatus;
+import com.revature.ERS2.models.User;
 
 import java.util.List;
 
@@ -24,11 +25,11 @@ public interface ReimbursementService {
     List<Reimbursement> getReimbursementsByAuthorAndStatus(int authorId, ReimbursementStatus status);
 
     //TODO: Adam
-    void createReimbursement(Reimbursement r, int authorId);
+    void createReimbursement(Reimbursement r, User author);
     void updateReimbursement(Reimbursement r);
     void deleteReimbursement(int reimbursementID);
 
-    void resolveReimbursement(int resolverId, int reimbursementId, ReimbursementStatus status);
+    void resolveReimbursement(User resolver, int reimbursementId, ReimbursementStatus status);
 
 }
 
