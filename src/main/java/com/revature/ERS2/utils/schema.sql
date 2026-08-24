@@ -13,7 +13,6 @@ CREATE TABLE users (
     department_id INT REFERENCES departments(department_id),
     first_name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL,
-    email VARCHAR(100) NOT NULL UNIQUE,
     username VARCHAR(30) NOT NULL UNIQUE,
     hashed_password VARCHAR(255) NOT NULL,
     role VARCHAR(20) NOT NULL DEFAULT 'EMPLOYEE'
@@ -29,8 +28,11 @@ CREATE TABLE reimbursements (
     type VARCHAR(20) NOT NULL
         CHECK (type IN ('TRAVEL', 'FOOD', 'LODGING', 'MEDICAL','TRANSPORTATION', 'OTHER')),
     amount DECIMAL(10, 2) NOT NULL
-        CHECK (amount > 0 AND amount < 999999),
+        CHECK (amount > 0 AND amount <= 999999),
     submitted_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     resolved_at TIMESTAMP,
-    description VARCHAR(255) NOT NULL
+    description VARCHAR(255)
 );
+
+
+/* Changes:     /*email VARCHAR(100) NOT NULL UNIQUE,*/
