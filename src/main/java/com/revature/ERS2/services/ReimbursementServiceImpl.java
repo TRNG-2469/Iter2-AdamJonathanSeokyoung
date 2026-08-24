@@ -30,6 +30,7 @@ public class ReimbursementServiceImpl implements ReimbursementService {
                 .orElseThrow(() -> new ReimbursementNotFoundException(reimbursementID));
     }
 
+    //Will not return an ordered history
     @Override
     public List<Reimbursement> getReimbursementHistory() {
         List<Reimbursement> approved = getReimbursementsByStatus(ReimbursementStatus.APPROVED);
@@ -41,6 +42,11 @@ public class ReimbursementServiceImpl implements ReimbursementService {
 
     @Override
     public List<Reimbursement> getReimbursements(ReimbursementStatus status, Integer departmentId) {
+
+        //Todo: implement authorization so that this reroutes to author, authorStatus if user is EMPLOYEE
+        //if (role == EMPLOYEE)
+        // getReimbursementsByAuthor(authorId)
+        //etc
 
         //Branch to the appropiate method based on the query parameters
         if (status != null && departmentId != null) {
@@ -60,32 +66,34 @@ public class ReimbursementServiceImpl implements ReimbursementService {
 
     @Override
     public List<Reimbursement> getReimbursementsByStatus(ReimbursementStatus status) {
-        //reimbursementRepository.findByStatus(status);
-        return List.of();
+        return reimbursementRepository.findByStatus(status);
     }
 
     @Override
     public List<Reimbursement> getReimbursementsByDepartment(Integer departmentId) {
-        //reimbursementRepository.findByDepartment(departmentId);
-        return List.of();
+        return reimbursementRepository.findByAuthor_Department_DepartmentId(departmentId);
     }
 
     @Override
     public List<Reimbursement> getReimbursementsByStatusAndDepartment(ReimbursementStatus status, Integer departmentId) {
-        //reimbursementRepository.findByStatusAndDepartment(status, department)
-        return List.of();
+        return reimbursementRepository.findByStatusAndAuthor_Department_DepartmentId(status, departmentId);
     }
 
     @Override
     public List<Reimbursement> getReimbursementsByAuthor(int authorId) {
-        //reimbursementRepository.findByAuthor(authorId).orElseThrow( () -> new RuntimeException("implement custom"));
-        return List.of();
+
+        //Todo: use getById to verify if user exists
+        //userRepository.findById(authorId).orElseThrow( () -> throw new RuntimeException("Author was not found"))
+
+        return reimbursementRepository.findByAuthor(authorId);
     }
 
     @Override
     public List<Reimbursement> getReimbursementsByAuthorAndStatus(int authorId, ReimbursementStatus status) {
-        //reimbursementRepository.findByAuthorAndStatus(authorId, status).orElseThrow( () -> new RuntimeException("implement custom");
-        return List.of();
+        //Todo: again, once getById is implemented, uncomment
+        //userRepository.findById(authorId).orElseThrow( () -> throw new RuntimeException("Author was not found"))
+
+        return reimbursementRepository.findByAuthorAndStatus(authorId, status);
     }
 
     @Override

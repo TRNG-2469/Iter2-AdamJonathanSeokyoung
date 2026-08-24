@@ -20,28 +20,36 @@ public class Reimbursement {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="reimbursement_id")
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY) // Lazy loading optimizes database queries
     @JoinColumn(name = "author_id", nullable = false)
     private User author;
+
     @ManyToOne(fetch = FetchType.LAZY) // Lazy loading optimizes database queries
     @JoinColumn(name = "resolver_id")
     private User resolver;
+
     @DecimalMin(value = "0.01", message = "Amount must be a positive value")
     @DecimalMax(value = "999999.00", message = "Amount must be less than or equal to 999999.00")
     @NotNull(message = "Amount is required")
     private BigDecimal amount;
+
     @Enumerated(EnumType.STRING)
     @NotNull(message = "Status is required")
     private ReimbursementStatus status;
     @Enumerated(EnumType.STRING)
+
     @NotNull(message = "Type is required")
     private ReimbursementType type;
+
     @Size(max = 255, message = "Description must be less than or equal to 255 characters")
     private String description;
+
     @NotNull(message = "Submitted at is required")
     private LocalDateTime submittedAt;
+
     private LocalDateTime resolvedAt;
 }
 
