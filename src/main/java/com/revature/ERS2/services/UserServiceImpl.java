@@ -6,6 +6,7 @@ import com.revature.ERS2.models.Reimbursement;
 import com.revature.ERS2.models.Role;
 import com.revature.ERS2.models.User;
 import com.revature.ERS2.repositories.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -16,9 +17,11 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<User> getAllUsers(){
@@ -51,7 +54,7 @@ public class UserServiceImpl implements UserService {
         u.setFirstName(dto.getFirstName());
         u.setLastName(dto.getLastName());
         u.setUsername(dto.getUsername());
-        u.setPassword(dto.getPassword());
+        u.setPassword(passwordEncoder.encode(dto.getPassword()));
         u.setDepartment(dto.getDepartment());
         u.setRole(Role.EMPLOYEE); // explicit default
         return userRepository.save(u);
