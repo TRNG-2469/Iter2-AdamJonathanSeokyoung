@@ -3,6 +3,7 @@ package com.revature.ERS2.configs;
 import com.revature.ERS2.security.jwt.JwtAuthFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -39,8 +40,10 @@ public class SecurityConfig {
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/reimbursements/**")
+                        .requestMatchers(HttpMethod.GET, "/api/reimbursements/**")
                             .hasAnyRole("EMPLOYEE", "MANAGER")
+                        .requestMatchers(HttpMethod.PATCH, "/api/reimbursements/*/status")
+                            .hasAnyRole("MANAGER")
                         .anyRequest().authenticated()
 
                         //.anyRequest().permitAll()

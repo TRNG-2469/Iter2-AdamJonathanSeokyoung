@@ -1,6 +1,8 @@
 package com.revature.ERS2.services;
 
 import com.revature.ERS2.dtos.requests.CreateReimbursementReq;
+import com.revature.ERS2.dtos.requests.PatchReimbursementReq;
+import com.revature.ERS2.dtos.requests.ResolveReimbursementReq;
 import com.revature.ERS2.dtos.responses.ReimbursementResponse;
 import com.revature.ERS2.models.Reimbursement;
 import com.revature.ERS2.models.ReimbursementStatus;
@@ -29,10 +31,10 @@ public interface ReimbursementService {
     //check controllers for updated signatures
 
     ReimbursementResponse createReimbursement(CreateReimbursementReq rDTO, String username);
-    void updateReimbursement(Reimbursement r);
-    void deleteReimbursement(int reimbursementID);
+    ReimbursementResponse updateReimbursement(PatchReimbursementReq r, String username, int reimbursement_id);
+    void deleteReimbursement(int reimbursementID, String username);
 
-    void resolveReimbursement(User resolver, int reimbursementId, ReimbursementStatus status);
+    ReimbursementResponse resolveReimbursement(ResolveReimbursementReq rDTO, int reimbursementID, String username);
 
 }
 
