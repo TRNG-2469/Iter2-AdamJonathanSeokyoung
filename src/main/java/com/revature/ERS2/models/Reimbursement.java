@@ -39,8 +39,8 @@ public class Reimbursement {
     @Enumerated(EnumType.STRING)
     @NotNull(message = "Status is required")
     private ReimbursementStatus status;
-    @Enumerated(EnumType.STRING)
 
+    @Enumerated(EnumType.STRING)
     @NotNull(message = "Type is required")
     private ReimbursementType type;
 
@@ -51,6 +51,21 @@ public class Reimbursement {
     private LocalDateTime submittedAt;
 
     private LocalDateTime resolvedAt;
+
+    //Constructor for creating reimbursements via POST
+    //Users should not be able to set resolve time, id, etc.
+    public Reimbursement(User author, BigDecimal amount, ReimbursementStatus status, ReimbursementType type,
+                         String description, LocalDateTime submittedAt) {
+        this.author = author;
+        this.amount = amount;
+        this.status = status;
+        this.type = type;
+        this.description = description;
+        this.submittedAt = submittedAt;
+    }
+
+
+
 }
 
 
