@@ -1,8 +1,10 @@
 package com.revature.ERS2.services;
 
+import com.revature.ERS2.dtos.CreateUserDto;
 import com.revature.ERS2.models.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
 
@@ -22,7 +24,7 @@ public interface UserService {
     List<User> getUsersByDepartment(int departmentId);
 
     //TODO: Seoky DML
-    User createUser(User u);
+    User createUser(CreateUserDto u);
 
     //Update role?
     //Delete user?

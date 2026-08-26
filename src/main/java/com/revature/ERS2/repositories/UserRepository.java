@@ -13,5 +13,4 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     List<User> getUsersByDepartment(int id);
 
-    User findByUsername(String username);
 }
