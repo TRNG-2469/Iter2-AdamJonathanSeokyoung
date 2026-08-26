@@ -30,8 +30,6 @@ public class AuthController {
     @PostMapping("/login")
     public JwtResponse login(@RequestBody JwtRequest request) {
 
-        System.out.println("LOGIN ENDPOINT HIT");
-
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
 

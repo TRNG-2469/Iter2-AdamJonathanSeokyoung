@@ -1,5 +1,7 @@
 package com.revature.ERS2.services;
 
+import com.revature.ERS2.dtos.requests.CreateReimbursementReq;
+import com.revature.ERS2.dtos.responses.ReimbursementResponse;
 import com.revature.ERS2.models.Reimbursement;
 import com.revature.ERS2.models.ReimbursementStatus;
 import com.revature.ERS2.models.User;
@@ -9,23 +11,24 @@ import java.util.List;
 public interface ReimbursementService {
 
     //TODO: Jonathan
-    List<Reimbursement> getAllReimbursements();
-    Reimbursement getReimbursementById(int reimbursementID);
-    List<Reimbursement> getReimbursementHistory();
+    List<ReimbursementResponse> getAllReimbursements();
+    ReimbursementResponse getReimbursementById(int reimbursementID);
+    List<ReimbursementResponse> getReimbursementHistory();
 
-    //TODO: Rest seoky
-    //Status or department, or both
-    //For branching
-    List<Reimbursement> getReimbursements(ReimbursementStatus status, Integer departmentId);
-
-    List<Reimbursement> getReimbursementsByStatus(ReimbursementStatus status);
-    List<Reimbursement> getReimbursementsByDepartment(Integer departmentId);
-    List<Reimbursement> getReimbursementsByStatusAndDepartment(ReimbursementStatus status, Integer departmentId);
-    List<Reimbursement> getReimbursementsByAuthor(int authorId);
-    List<Reimbursement> getReimbursementsByAuthorAndStatus(int authorId, ReimbursementStatus status);
+    //TODO: Seoky
+    List<ReimbursementResponse> getReimbursements(ReimbursementStatus status, Integer departmentId);
+    List<ReimbursementResponse> getReimbursementsByStatus(ReimbursementStatus status);
+    List<ReimbursementResponse> getReimbursementsByDepartment(Integer departmentId);
+    List<ReimbursementResponse> getReimbursementsByStatusAndDepartment(ReimbursementStatus status, Integer departmentId);
+    List<ReimbursementResponse> getReimbursementsByAuthor(int authorId);
+    List<ReimbursementResponse> getReimbursementsByAuthorAndStatus(int authorId, ReimbursementStatus status);
 
     //TODO: Adam
-    void createReimbursement(Reimbursement r, User author);
+
+    //I believe updateReimbursement, resolveReimbursement now returns ReimbursementResponse
+    //check controllers for updated signatures
+
+    ReimbursementResponse createReimbursement(CreateReimbursementReq rDTO, String username);
     void updateReimbursement(Reimbursement r);
     void deleteReimbursement(int reimbursementID);
 
