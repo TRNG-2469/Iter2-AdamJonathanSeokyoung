@@ -3,6 +3,8 @@ package com.revature.ERS2.repositories;
 import com.revature.ERS2.models.Reimbursement;
 import com.revature.ERS2.models.ReimbursementStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -18,4 +20,7 @@ public interface ReimbursementRepository extends JpaRepository<Reimbursement, In
 
     List<Reimbursement> findByAuthor(Integer authorId);
     List<Reimbursement> findByAuthorAndStatus(Integer authorId, ReimbursementStatus status);
+
+    @Query("SELECT r FROM Reimbursement r WHERE r.status IN (:statuses) ORDER BY r.resolvedAt ASC")
+    List<Reimbursement> getResolvedHistory(@Param("statuses") List<ReimbursementStatus> statuses);
 }

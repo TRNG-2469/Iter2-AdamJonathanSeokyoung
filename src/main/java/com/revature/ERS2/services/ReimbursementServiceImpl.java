@@ -35,11 +35,8 @@ public class ReimbursementServiceImpl implements ReimbursementService {
     //Will not return an ordered history
     @Override
     public List<Reimbursement> getReimbursementHistory() {
-        List<Reimbursement> approved = getReimbursementsByStatus(ReimbursementStatus.APPROVED);
-        List<Reimbursement> denied = getReimbursementsByStatus(ReimbursementStatus.DENIED);
-        return Stream.of(approved, denied)
-                .flatMap(List::stream)
-                .toList();
+        return reimbursementRepository.getResolvedHistory(
+                List.of(ReimbursementStatus.APPROVED, ReimbursementStatus.DENIED));
     }
 
     @Override
