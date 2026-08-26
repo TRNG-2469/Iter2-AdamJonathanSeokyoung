@@ -61,8 +61,7 @@ public class ReimbursementController {
 
         String loggedInUsername = authentication.getName();
 
-        //uncomment when delete is finished
-        //reimbursementService.deleteReimbursement(id, username);
+        reimbursementService.deleteReimbursement(id, loggedInUsername);
 
         return ResponseEntity.noContent().build();
     }
@@ -73,11 +72,8 @@ public class ReimbursementController {
                                                                     Authentication authentication) {
 
         String loggedInUsername = authentication.getName();
-        //uncomment when patch is finished
-        //ReimbursementResponse rResponse = reimbursementService.updateReimbursement(rDTO, reimbursementId, username);
-        //return ResponseEntity.ok(rResponse);
-
-        return ResponseEntity.noContent().build();
+        ReimbursementResponse rResponse = reimbursementService.updateReimbursement(rDTO, loggedInUsername, reimbursementId);
+        return ResponseEntity.ok(rResponse);
     }
 
     @PatchMapping("/reimbursements/{id}/status")
@@ -86,10 +82,7 @@ public class ReimbursementController {
                                                                       Authentication authentication) {
 
         String loggedInUsername = authentication.getName();
-        //uncomment when resolved finished
-        //ReimbursementResponse rResponse = reimbursementService.resolveReimbursement(rDTO, reimbursementId, loggedInUsername);
-        //return ResponseEntity.ok(rResponse);
-
-        return ResponseEntity.noContent().build();
+        ReimbursementResponse rResponse = reimbursementService.resolveReimbursement(rDTO, reimbursementId, loggedInUsername);
+        return ResponseEntity.ok(rResponse);
     }
 }
