@@ -6,7 +6,7 @@ document.querySelector("#loginForm").addEventListener("submit", async (event) =>
     const username = document.querySelector("#username").value;
     const password = document.querySelector("#password").value;
 
-    const response = await fetch("http://localhost:8080/api/auth/login", {
+    const response = await fetch("http://localhost:8081/api/auth/login", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"

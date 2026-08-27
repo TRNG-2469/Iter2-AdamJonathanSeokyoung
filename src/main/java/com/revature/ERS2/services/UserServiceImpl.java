@@ -1,6 +1,8 @@
 package com.revature.ERS2.services;
 
 import com.revature.ERS2.dtos.CreateUserDto;
+import com.revature.ERS2.dtos.responses.UserResponse;
+import com.revature.ERS2.exceptions.DepartmentNotFoundException;
 import com.revature.ERS2.exceptions.UserNotFoundException;
 import com.revature.ERS2.models.Reimbursement;
 import com.revature.ERS2.models.Role;

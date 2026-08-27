@@ -18,8 +18,8 @@ public interface ReimbursementRepository extends JpaRepository<Reimbursement, In
     List<Reimbursement> findByAuthor_Department_DepartmentId(Integer departmentId);
     List<Reimbursement> findByStatusAndAuthor_Department_DepartmentId(ReimbursementStatus status, Integer departmentId);
 
-    List<Reimbursement> findByAuthor(Integer authorId);
-    List<Reimbursement> findByAuthorAndStatus(Integer authorId, ReimbursementStatus status);
+    List<Reimbursement> findByAuthor_Id(Integer authorId);
+    List<Reimbursement> findByAuthor_IdAndStatus(Integer authorId, ReimbursementStatus status);
 
     @Query("SELECT r FROM Reimbursement r WHERE r.status IN (:statuses) ORDER BY r.resolvedAt ASC")
     List<Reimbursement> getResolvedHistory(@Param("statuses") List<ReimbursementStatus> statuses);
