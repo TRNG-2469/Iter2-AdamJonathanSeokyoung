@@ -2,7 +2,6 @@ package com.revature.ERS2.controllers;
 
 import com.revature.ERS2.dtos.CreateUserDto;
 import com.revature.ERS2.dtos.responses.UserResponse;
-import com.revature.ERS2.models.User;
 import com.revature.ERS2.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -34,8 +33,8 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public ResponseEntity<User> createUser(@RequestBody CreateUserDto u) {
-        User createdUser = userService.createUser(u);
+    public ResponseEntity<UserResponse> createUser(@RequestBody CreateUserDto u) {
+        UserResponse createdUser = userService.createUser(u);
         return ResponseEntity.status(201).body(createdUser);
     }
 
