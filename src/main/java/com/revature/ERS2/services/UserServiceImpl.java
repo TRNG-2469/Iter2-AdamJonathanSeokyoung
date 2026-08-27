@@ -10,6 +10,7 @@ import com.revature.ERS2.models.Role;
 import com.revature.ERS2.models.User;
 import com.revature.ERS2.repositories.DepartmentRepository;
 import com.revature.ERS2.repositories.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ import java.util.Optional;
 
 import java.util.List;
 
+@Slf4j
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -76,8 +78,10 @@ public class UserServiceImpl implements UserService {
         u.setPassword(passwordEncoder.encode(dto.getPassword()));
         u.setDepartment(department);
         u.setRole(Role.EMPLOYEE); // explicit default
+        
 
         User savedUser = userRepository.save(u);
+        log.info("User {} created with role '{}'", savedUser.getId(), savedUser.getRole());
         return transformUserToResponse(savedUser);
     }
 
