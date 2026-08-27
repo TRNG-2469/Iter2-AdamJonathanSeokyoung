@@ -1,0 +1,23 @@
+#historyButton {
+    margin-top: 10px;
+}
+
+.rcontainer {
+    display: flex;
+    padding: 0.5rem; 
+    border: 3px solid black;
+    border-radius: 5px; 
+    gap: 0.5rem;
+}
+
+.reimbursement-actions {
+    display: flex;
+    gap: 0.3rem;
+    margin-left: auto;
+}
+
+#reimbursements {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}

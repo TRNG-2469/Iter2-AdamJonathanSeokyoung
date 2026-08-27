@@ -1,20 +1,15 @@
 package com.revature.ERS2.controllers;
 
-
 import com.revature.ERS2.dtos.requests.CreateReimbursementReq;
 import com.revature.ERS2.dtos.requests.PatchReimbursementReq;
 import com.revature.ERS2.dtos.requests.ResolveReimbursementReq;
 import com.revature.ERS2.dtos.responses.ReimbursementResponse;
-import com.revature.ERS2.models.Reimbursement;
 import com.revature.ERS2.models.ReimbursementStatus;
 import com.revature.ERS2.services.ReimbursementService;
 import jakarta.validation.Valid;
-import jakarta.websocket.server.PathParam;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
-import java.net.Authenticator;
 import java.util.List;
 
 @RestController
@@ -37,12 +32,14 @@ public class ReimbursementController {
         return reimbursementService.getReimbursementHistory();
     }
 
-
     @GetMapping("/reimbursements")
     public ResponseEntity<List<ReimbursementResponse>> getReimbursements(@RequestParam(required = false) ReimbursementStatus status,
-                                                                 @RequestParam(required = false) Integer departmentId) {
+                                                                         @RequestParam(required = false) Integer departmentId,
+                                                                         Authentication authentication) {
 
-        List<ReimbursementResponse> reimbursements = reimbursementService.getReimbursements(status, departmentId);
+        String username = authentication.getName();
+
+        List<ReimbursementResponse> reimbursements = reimbursementService.getReimbursements(status, departmentId, username);
         return ResponseEntity.ok(reimbursements);
     }
 

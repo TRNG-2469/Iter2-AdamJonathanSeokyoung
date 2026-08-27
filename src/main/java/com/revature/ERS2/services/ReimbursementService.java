@@ -18,7 +18,7 @@ public interface ReimbursementService {
     List<ReimbursementResponse> getReimbursementHistory();
 
     //TODO: Seoky
-    List<ReimbursementResponse> getReimbursements(ReimbursementStatus status, Integer departmentId);
+    List<ReimbursementResponse> getReimbursements(ReimbursementStatus status, Integer departmentId, String username);
     List<ReimbursementResponse> getReimbursementsByStatus(ReimbursementStatus status);
     List<ReimbursementResponse> getReimbursementsByDepartment(Integer departmentId);
     List<ReimbursementResponse> getReimbursementsByStatusAndDepartment(ReimbursementStatus status, Integer departmentId);
