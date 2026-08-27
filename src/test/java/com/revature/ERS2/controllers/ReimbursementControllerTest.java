@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -123,12 +124,16 @@ public class ReimbursementControllerTest {
     @Test
     void testGetReimbursementsWithStatusAndDepartment() {
         when(reimbursementService.getReimbursements(
-                ReimbursementStatus.APPROVED, 10))
+                ReimbursementStatus.APPROVED, 10, "jDoe"))
                 .thenReturn(List.of(reimbursementResponse));
+
+        Authentication authentication = Mockito.mock(Authentication.class);
+
+        when(authentication.getName()).thenReturn("jDoe");
 
         ResponseEntity<List<ReimbursementResponse>> result =
                 reimbursementController.getReimbursements(
-                        ReimbursementStatus.APPROVED, 10);
+                        ReimbursementStatus.APPROVED, 10, authentication);
 
         assertNotNull(result);
         assertEquals(200, result.getStatusCode().value());
@@ -137,18 +142,22 @@ public class ReimbursementControllerTest {
         assertEquals(100, result.getBody().get(0).getId());
 
         verify(reimbursementService)
-                .getReimbursements(ReimbursementStatus.APPROVED, 10);
+                .getReimbursements(ReimbursementStatus.APPROVED, 10, "jDoe");
     }
 
     @Test
     void testGetReimbursementsWithStatusOnly() {
         when(reimbursementService.getReimbursements(
-                ReimbursementStatus.PENDING, null))
+                ReimbursementStatus.PENDING, null, "jDoe"))
                 .thenReturn(List.of(reimbursementResponse));
+
+        Authentication authentication = Mockito.mock(Authentication.class);
+
+        when(authentication.getName()).thenReturn("jDoe");
 
         ResponseEntity<List<ReimbursementResponse>> result =
                 reimbursementController.getReimbursements(
-                        ReimbursementStatus.PENDING, null);
+                        ReimbursementStatus.PENDING, null, authentication);
 
         assertNotNull(result);
         assertEquals(200, result.getStatusCode().value());
@@ -156,16 +165,20 @@ public class ReimbursementControllerTest {
         assertEquals(1, result.getBody().size());
 
         verify(reimbursementService)
-                .getReimbursements(ReimbursementStatus.PENDING, null);
+                .getReimbursements(ReimbursementStatus.PENDING, null, "jDoe");
     }
 
     @Test
     void testGetReimbursementsWithDepartmentOnly() {
-        when(reimbursementService.getReimbursements(null, 10))
+        when(reimbursementService.getReimbursements(null, 10, "jDoe"))
                 .thenReturn(List.of(reimbursementResponse));
 
+        Authentication authentication = Mockito.mock(Authentication.class);
+
+        when(authentication.getName()).thenReturn("jDoe");
+
         ResponseEntity<List<ReimbursementResponse>> result =
-                reimbursementController.getReimbursements(null, 10);
+                reimbursementController.getReimbursements(null, 10, authentication);
 
         assertNotNull(result);
         assertEquals(200, result.getStatusCode().value());
@@ -173,16 +186,20 @@ public class ReimbursementControllerTest {
         assertEquals(1, result.getBody().size());
 
         verify(reimbursementService)
-                .getReimbursements(null, 10);
+                .getReimbursements(null, 10, "jDoe");
     }
 
     @Test
     void testGetReimbursementsWithNoFilters() {
-        when(reimbursementService.getReimbursements(null, null))
+        when(reimbursementService.getReimbursements(null, null, "jDoe"))
                 .thenReturn(List.of(reimbursementResponse));
 
+        Authentication authentication = Mockito.mock(Authentication.class);
+
+        when(authentication.getName()).thenReturn("jDoe");
+
         ResponseEntity<List<ReimbursementResponse>> result =
-                reimbursementController.getReimbursements(null, null);
+                reimbursementController.getReimbursements(null, null, authentication);
 
         assertNotNull(result);
         assertEquals(200, result.getStatusCode().value());
@@ -190,7 +207,7 @@ public class ReimbursementControllerTest {
         assertEquals(1, result.getBody().size());
 
         verify(reimbursementService)
-                .getReimbursements(null, null);
+                .getReimbursements(null, null, "jDoe");
     }
 
     @Test
@@ -335,4 +352,5 @@ public class ReimbursementControllerTest {
         verify(reimbursementService)
                 .resolveReimbursement(request, 100, "manager");
     }
+
 }

@@ -4,6 +4,7 @@ import com.revature.ERS2.dtos.requests.CreateReimbursementReq;
 import com.revature.ERS2.dtos.requests.PatchReimbursementReq;
 import com.revature.ERS2.dtos.requests.ResolveReimbursementReq;
 import com.revature.ERS2.dtos.responses.ReimbursementResponse;
+import com.revature.ERS2.exceptions.ForbiddenException;
 import com.revature.ERS2.exceptions.ReimbursementNotFoundException;
 import com.revature.ERS2.exceptions.UserNotFoundException;
 import com.revature.ERS2.models.Reimbursement;
@@ -145,11 +146,9 @@ public class ReimbursementServiceImplTest {
         when(denied.getSubmittedAt()).thenReturn(submittedAt);
         when(denied.getResolvedAt()).thenReturn(submittedAt);
 
-        when(reimbursementRepository.findByStatus(ReimbursementStatus.APPROVED))
-                .thenReturn(List.of(approved));
-
-        when(reimbursementRepository.findByStatus(ReimbursementStatus.DENIED))
-                .thenReturn(List.of(denied));
+        when(reimbursementRepository.getResolvedHistory(
+                List.of(ReimbursementStatus.APPROVED, ReimbursementStatus.DENIED)))
+                .thenReturn(List.of(approved,denied));
 
         List<ReimbursementResponse> result =
                 reimbursementService.getReimbursementHistory();
@@ -159,14 +158,15 @@ public class ReimbursementServiceImplTest {
         assertEquals(102, result.get(1).getId());
 
         verify(reimbursementRepository)
-                .findByStatus(ReimbursementStatus.APPROVED);
-
-        verify(reimbursementRepository)
-                .findByStatus(ReimbursementStatus.DENIED);
+                .getResolvedHistory(List.of(ReimbursementStatus.APPROVED, ReimbursementStatus.DENIED));
     }
 
     @Test
     void testGetReimbursementsWithStatusAndDepartment() {
+        when(author.getUsername()).thenReturn("john_doe");
+
+        when(userRepository.findByUsername(author.getUsername())).thenReturn(Optional.ofNullable(author));
+
         when(reimbursementRepository
                 .findByStatusAndAuthor_Department_DepartmentId(
                         ReimbursementStatus.APPROVED, 10))
@@ -174,7 +174,7 @@ public class ReimbursementServiceImplTest {
 
         List<ReimbursementResponse> result =
                 reimbursementService.getReimbursements(
-                        ReimbursementStatus.APPROVED, 10);
+                        ReimbursementStatus.APPROVED, 10,author.getUsername());
 
         assertEquals(1, result.size());
 
@@ -185,13 +185,17 @@ public class ReimbursementServiceImplTest {
 
     @Test
     void testGetReimbursementsWithStatusOnly() {
+        when(author.getUsername()).thenReturn("john_doe");
+
+        when(userRepository.findByUsername(author.getUsername())).thenReturn(Optional.ofNullable(author));
+
         when(reimbursementRepository.findByStatus(
                 ReimbursementStatus.APPROVED))
                 .thenReturn(List.of(reimbursement));
 
         List<ReimbursementResponse> result =
                 reimbursementService.getReimbursements(
-                        ReimbursementStatus.APPROVED, null);
+                        ReimbursementStatus.APPROVED, null,author.getUsername());
 
         assertEquals(1, result.size());
 
@@ -201,12 +205,16 @@ public class ReimbursementServiceImplTest {
 
     @Test
     void testGetReimbursementsWithDepartmentOnly() {
+        when(author.getUsername()).thenReturn("john_doe");
+
+        when(userRepository.findByUsername(author.getUsername())).thenReturn(Optional.ofNullable(author));
+
         when(reimbursementRepository
                 .findByAuthor_Department_DepartmentId(10))
                 .thenReturn(List.of(reimbursement));
 
         List<ReimbursementResponse> result =
-                reimbursementService.getReimbursements(null, 10);
+                reimbursementService.getReimbursements(null, 10, author.getUsername());
 
         assertEquals(1, result.size());
 
@@ -216,11 +224,15 @@ public class ReimbursementServiceImplTest {
 
     @Test
     void testGetReimbursementsWithNoFilters() {
+        when(author.getUsername()).thenReturn("john_doe");
+
+        when(userRepository.findByUsername(author.getUsername())).thenReturn(Optional.ofNullable(author));
+
         when(reimbursementRepository.findAll())
                 .thenReturn(List.of(reimbursement));
 
         List<ReimbursementResponse> result =
-                reimbursementService.getReimbursements(null, null);
+                reimbursementService.getReimbursements(null, null, author.getUsername());
 
         assertEquals(1, result.size());
 
@@ -280,7 +292,7 @@ public class ReimbursementServiceImplTest {
 
     @Test
     void testGetReimbursementsByAuthor() {
-        when(reimbursementRepository.findByAuthor(1))
+        when(reimbursementRepository.findByAuthor_Id(1))
                 .thenReturn(List.of(reimbursement));
 
         List<ReimbursementResponse> result =
@@ -289,12 +301,12 @@ public class ReimbursementServiceImplTest {
         assertEquals(1, result.size());
         assertEquals(1, result.get(0).getAuthorId());
 
-        verify(reimbursementRepository).findByAuthor(1);
+        verify(reimbursementRepository).findByAuthor_Id(1);
     }
 
     @Test
     void testGetReimbursementsByAuthorAndStatus() {
-        when(reimbursementRepository.findByAuthorAndStatus(
+        when(reimbursementRepository.findByAuthor_IdAndStatus(
                 1, ReimbursementStatus.PENDING))
                 .thenReturn(List.of(reimbursement));
 
@@ -307,7 +319,7 @@ public class ReimbursementServiceImplTest {
                 result.get(0).getStatus());
 
         verify(reimbursementRepository)
-                .findByAuthorAndStatus(
+                .findByAuthor_IdAndStatus(
                         1, ReimbursementStatus.PENDING);
     }
 
@@ -457,9 +469,13 @@ public class ReimbursementServiceImplTest {
         when(reimbursementRepository.findById(100))
                 .thenReturn(Optional.of(reimbursement));
 
-        reimbursementService.deleteReimbursement(100, "jane");
+        assertThrows(
+                ForbiddenException.class,
+                () -> reimbursementService.deleteReimbursement(100, "jane")
+        );
 
-        verify(reimbursementRepository, never()).deleteById(100);
+        verify(reimbursementRepository, never())
+                .deleteById(anyInt());
     }
 
     @Test
