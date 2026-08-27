@@ -9,6 +9,7 @@ import com.revature.ERS2.models.Role;
 import com.revature.ERS2.models.User;
 import com.revature.ERS2.repositories.DepartmentRepository;
 import com.revature.ERS2.repositories.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import java.util.Optional;
 
 import java.util.List;
 
+@Slf4j
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -61,7 +63,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(CreateUserDto dto) {
-        //No Auth because user was just created, redirect to login?
+        //No Auth because user was just created?
         User u = new User();
         u.setFirstName(dto.getFirstName());
         u.setLastName(dto.getLastName());
@@ -69,6 +71,7 @@ public class UserServiceImpl implements UserService {
         u.setPassword(passwordEncoder.encode(dto.getPassword()));
         u.setDepartment(dto.getDepartment());
         u.setRole(Role.EMPLOYEE); // explicit default
+        log.info("User {} created with role '{}'", u.getId(), u.getRole());
         return userRepository.save(u);
     }
 
