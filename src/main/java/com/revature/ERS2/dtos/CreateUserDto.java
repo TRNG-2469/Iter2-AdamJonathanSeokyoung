@@ -3,6 +3,7 @@ package com.revature.ERS2.dtos;
 import com.revature.ERS2.models.Department;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,11 +25,9 @@ public class CreateUserDto {
     @Size(max = 30, message = "Username must be less than 30 characters")
     private String username;
 
-    @Column(name="hashed_password")
     @NotBlank(message = "Password is mandatory")
     private String password;
 
-    @ManyToOne(fetch = FetchType.LAZY) // Lazy loading optimizes database queries
-    @JoinColumn(name = "department_id")
-    private Department department;
+    @NotNull(message = "Department is mandatory")
+    private Integer departmentId;
 }

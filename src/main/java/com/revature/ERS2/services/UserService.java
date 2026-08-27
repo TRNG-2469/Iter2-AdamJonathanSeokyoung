@@ -18,7 +18,6 @@ public interface UserService {
 
     //Department has multiple users, changed to list
 
-    //TODO: Seoky DML
-    User createUser(CreateUserDto u);
+    UserResponse createUser(CreateUserDto u);
 
 }

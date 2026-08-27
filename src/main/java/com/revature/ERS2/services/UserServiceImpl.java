@@ -4,6 +4,7 @@ import com.revature.ERS2.dtos.CreateUserDto;
 import com.revature.ERS2.dtos.responses.UserResponse;
 import com.revature.ERS2.exceptions.DepartmentNotFoundException;
 import com.revature.ERS2.exceptions.UserNotFoundException;
+import com.revature.ERS2.models.Department;
 import com.revature.ERS2.models.Reimbursement;
 import com.revature.ERS2.models.Role;
 import com.revature.ERS2.models.User;
@@ -62,17 +63,26 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User createUser(CreateUserDto dto) {
-        //No Auth because user was just created?
+    public UserResponse createUser(CreateUserDto dto) {
+        //No Auth because user was just created, redirect to login?
+
+        Department department = departmentRepository
+                .findById(dto.getDepartmentId())
+                .orElseThrow(() ->
+                        new DepartmentNotFoundException(dto.getDepartmentId()));
+
         User u = new User();
         u.setFirstName(dto.getFirstName());
         u.setLastName(dto.getLastName());
         u.setUsername(dto.getUsername());
         u.setPassword(passwordEncoder.encode(dto.getPassword()));
-        u.setDepartment(dto.getDepartment());
+        u.setDepartment(department);
         u.setRole(Role.EMPLOYEE); // explicit default
-        log.info("User {} created with role '{}'", u.getId(), u.getRole());
-        return userRepository.save(u);
+        
+
+        User savedUser = userRepository.save(u);
+        log.info("User {} created with role '{}'", savedUser.getId(), savedUser.getRole());
+        return transformUserToResponse(savedUser);
     }
 
     /**
