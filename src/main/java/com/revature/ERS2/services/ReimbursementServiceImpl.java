@@ -32,7 +32,6 @@ public class ReimbursementServiceImpl implements ReimbursementService {
         this.userRepository = userRepository;
     }
 
-
     @Override
     public List<ReimbursementResponse> getAllReimbursements() {
         return transformReimbursementToResponse(reimbursementRepository.findAll());

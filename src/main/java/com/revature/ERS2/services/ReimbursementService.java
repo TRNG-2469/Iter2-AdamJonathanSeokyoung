@@ -12,23 +12,16 @@ import java.util.List;
 
 public interface ReimbursementService {
 
-    //TODO: Jonathan
     List<ReimbursementResponse> getAllReimbursements();
     ReimbursementResponse getReimbursementById(int reimbursementID);
     List<ReimbursementResponse> getReimbursementHistory();
 
-    //TODO: Seoky
     List<ReimbursementResponse> getReimbursements(ReimbursementStatus status, Integer departmentId, String username);
     List<ReimbursementResponse> getReimbursementsByStatus(ReimbursementStatus status);
     List<ReimbursementResponse> getReimbursementsByDepartment(Integer departmentId);
     List<ReimbursementResponse> getReimbursementsByStatusAndDepartment(ReimbursementStatus status, Integer departmentId);
     List<ReimbursementResponse> getReimbursementsByAuthor(int authorId);
     List<ReimbursementResponse> getReimbursementsByAuthorAndStatus(int authorId, ReimbursementStatus status);
-
-    //TODO: Adam
-
-    //I believe updateReimbursement, resolveReimbursement now returns ReimbursementResponse
-    //check controllers for updated signatures
 
     ReimbursementResponse createReimbursement(CreateReimbursementReq rDTO, String username);
     ReimbursementResponse updateReimbursement(PatchReimbursementReq r, String username, int reimbursement_id);
