@@ -1,12 +1,21 @@
 package com.revature.ERS2.services;
 
+import com.revature.ERS2.dtos.requests.CreateReimbursementReq;
+import com.revature.ERS2.dtos.requests.PatchReimbursementReq;
+import com.revature.ERS2.dtos.requests.ResolveReimbursementReq;
+import com.revature.ERS2.dtos.responses.ReimbursementResponse;
+import com.revature.ERS2.exceptions.ForbiddenException;
 import com.revature.ERS2.exceptions.ReimbursementNotFoundException;
+import com.revature.ERS2.exceptions.UserNotFoundException;
 import com.revature.ERS2.models.Reimbursement;
 import com.revature.ERS2.models.ReimbursementStatus;
+import com.revature.ERS2.models.Role;
 import com.revature.ERS2.models.User;
 import com.revature.ERS2.repositories.ReimbursementRepository;
+import com.revature.ERS2.repositories.UserRepository;
 import org.springframework.stereotype.Service;
-
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -15,21 +24,25 @@ import java.util.stream.Stream;
 public class ReimbursementServiceImpl implements ReimbursementService {
 
     private final ReimbursementRepository reimbursementRepository;
+    private final UserRepository userRepository;
 
-    public ReimbursementServiceImpl(ReimbursementRepository reimbursementRepository) {
+    public ReimbursementServiceImpl(ReimbursementRepository reimbursementRepository,
+                                    UserRepository userRepository) {
         this.reimbursementRepository = reimbursementRepository;
+        this.userRepository = userRepository;
     }
 
 
     @Override
-    public List<Reimbursement> getAllReimbursements() {
-        return reimbursementRepository.findAll();
+    public List<ReimbursementResponse> getAllReimbursements() {
+        return transformReimbursementToResponse(reimbursementRepository.findAll());
     }
 
     @Override
-    public Reimbursement getReimbursementById(int reimbursementID) {
-        return reimbursementRepository.findById(reimbursementID)
+    public ReimbursementResponse getReimbursementById(int reimbursementID) {
+        Reimbursement reimbursement = reimbursementRepository.findById(reimbursementID)
                 .orElseThrow(() -> new ReimbursementNotFoundException(reimbursementID));
+        return transformReimbursementToResponse(reimbursement);
     }
 
     //Will not return an ordered history
@@ -40,12 +53,26 @@ public class ReimbursementServiceImpl implements ReimbursementService {
     }
 
     @Override
-    public List<Reimbursement> getReimbursements(ReimbursementStatus status, Integer departmentId) {
+    public List<ReimbursementResponse> getReimbursements(ReimbursementStatus status, Integer departmentId, String username) {
 
-        //Todo: implement authorization so that this reroutes to author, authorStatus if user is EMPLOYEE
-        //if (role == EMPLOYEE)
-        // getReimbursementsByAuthor(authorId)
-        //etc
+        User user = userRepository.findByUsername(username)
+                .orElseThrow( () -> new UserNotFoundException(username));
+
+        //Employee roles get routed
+        if (user.getRole() == Role.EMPLOYEE) {
+
+            if (departmentId != null) {
+                throw new ForbiddenException("Employees cannot filter by department");
+            }
+
+            if (status != null) {
+                return getReimbursementsByAuthorAndStatus(user.getId(), status);
+            } else {
+                return getReimbursementsByAuthor(user.getId());
+            }
+        }
+
+        //Manager only methods below
 
         //Branch to the appropiate method based on the query parameters
         if (status != null && departmentId != null) {
@@ -64,74 +91,168 @@ public class ReimbursementServiceImpl implements ReimbursementService {
     }
 
     @Override
-    public List<Reimbursement> getReimbursementsByStatus(ReimbursementStatus status) {
-        return reimbursementRepository.findByStatus(status);
+    public List<ReimbursementResponse> getReimbursementsByStatus(ReimbursementStatus status) {
+        return transformReimbursementToResponse(reimbursementRepository.findByStatus(status));
     }
 
     @Override
-    public List<Reimbursement> getReimbursementsByDepartment(Integer departmentId) {
-        return reimbursementRepository.findByAuthor_Department_DepartmentId(departmentId);
+    public List<ReimbursementResponse> getReimbursementsByDepartment(Integer departmentId) {
+        return transformReimbursementToResponse(reimbursementRepository.findByAuthor_Department_DepartmentId(departmentId));
     }
 
     @Override
-    public List<Reimbursement> getReimbursementsByStatusAndDepartment(ReimbursementStatus status, Integer departmentId) {
-        return reimbursementRepository.findByStatusAndAuthor_Department_DepartmentId(status, departmentId);
+    public List<ReimbursementResponse> getReimbursementsByStatusAndDepartment(ReimbursementStatus status, Integer departmentId) {
+        return transformReimbursementToResponse(reimbursementRepository.findByStatusAndAuthor_Department_DepartmentId(status, departmentId));
     }
 
     @Override
-    public List<Reimbursement> getReimbursementsByAuthor(int authorId) {
+    public List<ReimbursementResponse> getReimbursementsByAuthor(int authorId) {
+        //verified author exists in parent class and is the caller
 
-        //Todo: use getById to verify if user exists
+        return transformReimbursementToResponse(reimbursementRepository.findByAuthor_Id(authorId));
+    }
+
+    @Override
+    public List<ReimbursementResponse> getReimbursementsByAuthorAndStatus(int authorId, ReimbursementStatus status) {
         //userRepository.findById(authorId).orElseThrow( () -> throw new RuntimeException("Author was not found"))
 
-        return reimbursementRepository.findByAuthor(authorId);
+        return transformReimbursementToResponse(reimbursementRepository.findByAuthor_IdAndStatus(authorId, status));
     }
 
     @Override
-    public List<Reimbursement> getReimbursementsByAuthorAndStatus(int authorId, ReimbursementStatus status) {
-        //Todo: again, once getById is implemented, uncomment
-        //userRepository.findById(authorId).orElseThrow( () -> throw new RuntimeException("Author was not found"))
+    public ReimbursementResponse createReimbursement(CreateReimbursementReq rDTO, String username) {
 
-        return reimbursementRepository.findByAuthorAndStatus(authorId, status);
+        //First, gets logged in user's username and sees if the user even exists
+        User author = userRepository.findByUsername(username).
+                orElseThrow(() -> new UserNotFoundException(username));
+
+        //Creates reimbursement object (special constructor for making new one from POST)
+        //This nulls things users shouldn't touch like resolved time, id, etc.
+        Reimbursement r = new Reimbursement(author, rDTO.getAmount(), ReimbursementStatus.PENDING,
+                rDTO.getType(), rDTO.getDescription(), LocalDateTime.now());
+
+        Reimbursement savedR = reimbursementRepository.save(r);
+
+        //Constructs a reimbursement response (doesn't expose entire user object, just their id for frontend)
+        //Wrote a helper method cuz it was repetitive and I think we only have one model for Response
+        return transformReimbursementToResponse(savedR);
     }
 
     @Override
-    public void createReimbursement(Reimbursement r, User author) {
-        if (Objects.equals(author.getId(), r.getAuthor().getId())) {
-            reimbursementRepository.save(r);
+    public ReimbursementResponse updateReimbursement(PatchReimbursementReq r, String username, int reimbursement_id) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException(username));
+        Reimbursement existingReimbursement = reimbursementRepository.findById(reimbursement_id)
+                .orElseThrow(() -> new ReimbursementNotFoundException(reimbursement_id));
+
+        if (!Objects.equals(existingReimbursement.getAuthor().getId(), user.getId())) {
+            throw new ForbiddenException("You cannot update another person's reimbursement");
         }
+
+        if (existingReimbursement.getStatus() != ReimbursementStatus.PENDING) {
+            throw new IllegalStateException("Resolved reimbursements cannot be edited");
+        }
+
+        existingReimbursement.setAmount(r.getAmount());
+        existingReimbursement.setType(r.getType());
+        existingReimbursement.setDescription(r.getDescription());
+        Reimbursement savedReimbursement = reimbursementRepository.save(existingReimbursement);
+        return transformReimbursementToResponse(savedReimbursement);
     }
 
     @Override
-    public void updateReimbursement(Reimbursement r) {
-        Reimbursement existingReimbursement = reimbursementRepository.findById(r.getId()).orElse(null);
-        if (existingReimbursement != null) {
-            existingReimbursement.setAuthor(r.getAuthor());
-            existingReimbursement.setResolver(r.getResolver());
-            existingReimbursement.setAmount(r.getAmount());
-            existingReimbursement.setStatus(r.getStatus());
-            existingReimbursement.setType(r.getType());
-            existingReimbursement.setDescription(r.getDescription());
-            existingReimbursement.setSubmittedAt(r.getSubmittedAt());
-            existingReimbursement.setResolvedAt(r.getResolvedAt());
-            reimbursementRepository.save(existingReimbursement);
+    public void deleteReimbursement(int reimbursementID, String username) {
+        User u = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException(username));
+        Reimbursement r = reimbursementRepository.findById(reimbursementID)
+                .orElseThrow(() -> new ReimbursementNotFoundException(reimbursementID));
+        if (!u.getId().equals(r.getAuthor().getId())) {
+            throw new ForbiddenException("You cannot delete another user's reimbursement");
         }
+
+        if (r.getStatus() != ReimbursementStatus.PENDING) {
+            throw new IllegalStateException("Only pending reimbursements can be deleted");
+        }
+
+        reimbursementRepository.deleteById(reimbursementID);
+
     }
 
     @Override
-    public void deleteReimbursement(int reimbursementID) {
-        if (reimbursementRepository.existsById(reimbursementID)){
-            reimbursementRepository.deleteById(reimbursementID);
+    public ReimbursementResponse resolveReimbursement(ResolveReimbursementReq rDTO, int reimbursementID, String username) {
+        User resolver = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException(username));
+        Reimbursement reimbursement = reimbursementRepository.findById(reimbursementID)
+                .orElseThrow(() -> new ReimbursementNotFoundException(reimbursementID));
+        if (!reimbursement.getStatus().equals(ReimbursementStatus.PENDING)) {
+            throw new IllegalStateException("Cannot resolve a reimbursement that is not pending");
         }
+        if (rDTO.getStatus() == ReimbursementStatus.PENDING){
+            throw new IllegalArgumentException("Status cannot be set to pending");
+        }
+
+        if (reimbursement.getAuthor().getId().equals(resolver.getId())) {
+            throw new ForbiddenException("Managers cannot resolve their own reimbursement");
+        }
+
+            reimbursement.setResolver(resolver);
+            reimbursement.setStatus(rDTO.getStatus());
+            reimbursement.setResolvedAt(LocalDateTime.now());
+            Reimbursement savedReimbursement = reimbursementRepository.save(reimbursement);
+            return transformReimbursementToResponse(savedReimbursement);
     }
 
-    @Override
-    public void resolveReimbursement(User resolver, int reimbursementId, ReimbursementStatus status) {
-        Reimbursement existingReimbursement = reimbursementRepository.findById(reimbursementId).orElse(null);
-        if (existingReimbursement != null) {
-            existingReimbursement.setResolver(resolver);
-            existingReimbursement.setStatus(status);
-            reimbursementRepository.save(existingReimbursement);
+    /**
+     * Transforms a reimbursement to a reimbursement response
+     * (Does not expose user details)
+     *
+     * @param r Reimbursement
+     * @return
+     */
+    public static ReimbursementResponse transformReimbursementToResponse(Reimbursement r) {
+
+        Integer resolverId;
+
+        if (r.getResolver() == null) {
+            resolverId = null;
+        } else {
+            resolverId = r.getResolver().getId();
         }
+
+        return new ReimbursementResponse(r.getId(), r.getAuthor().getId(),
+                resolverId, r.getAmount(), r.getStatus(), r.getType(),
+                r.getDescription(), r.getSubmittedAt(), r.getResolvedAt());
     }
+
+
+    /**
+     * Well, transforms a list of reimbursements to list of reimbursementResponse
+     *
+     * @param rList
+     * @return
+     */
+    public static List<ReimbursementResponse> transformReimbursementToResponse(List<Reimbursement> rList) {
+
+        List<ReimbursementResponse> responseList = new ArrayList<>();
+
+        for (Reimbursement r : rList) {
+
+            Integer resolverId;
+
+            if (r.getResolver() == null) {
+                resolverId = null;
+            } else {
+                resolverId = r.getResolver().getId();
+            }
+
+            responseList.add(new ReimbursementResponse(r.getId(), r.getAuthor().getId(),
+                    resolverId, r.getAmount(), r.getStatus(), r.getType(),
+                    r.getDescription(), r.getSubmittedAt(), r.getResolvedAt()));
+        }
+
+        return responseList;
+    }
+
+
+
 }

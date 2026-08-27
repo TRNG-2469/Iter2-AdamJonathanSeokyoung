@@ -8,15 +8,12 @@ import java.util.Optional;
 
 public interface UserService {
 
-    /*User login(String username, String password); */
+    UserResponse getUserById(Integer userId);
+    UserResponse getUserByUsername(String username);
 
-    //TODO: ADAM
-    User getUserById(Integer userId);
-    User getUserByUsername(String username);
+    List<UserResponse> getAllUsers();
 
-    //TODO: jonathan
-    //added get all users for filtering
-    List<User> getAllUsers();
+    List<UserResponse> getUsersByDepartment(int departmentId);
 
     //User getUserByEmail(String email); REMOVED EMAIL
 
@@ -25,10 +22,5 @@ public interface UserService {
 
     //TODO: Seoky DML
     User createUser(CreateUserDto u);
-
-    //Update role?
-    //Delete user?
-    //OTHER CRUD
-    //updatre
 
 }

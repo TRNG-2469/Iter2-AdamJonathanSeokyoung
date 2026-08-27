@@ -3,6 +3,7 @@ package com.revature.ERS2.configs;
 import com.revature.ERS2.security.jwt.JwtAuthFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -35,17 +36,42 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
-                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/reimbursements/**")
-                            .hasAnyRole("EMPLOYEE", "MANAGER")
-                        .anyRequest().authenticated()
+            .cors(Customizer.withDefaults())
+            .csrf(csrf -> csrf.disable())
+            .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(auth -> auth
+                    .requestMatchers("/api/auth/**").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
 
-                        //.anyRequest().permitAll()
-                ) //;
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                    .requestMatchers(HttpMethod.GET, "/api/reimbursements")
+                        .hasAnyRole("EMPLOYEE", "MANAGER")
+                    .requestMatchers(HttpMethod.GET, "/api/reimbursements/{id}")
+                        .hasRole("MANAGER")
+                    .requestMatchers(HttpMethod.GET, "/api/reimbursements/history")
+                        .hasRole("MANAGER")
+
+                    .requestMatchers(HttpMethod.POST, "/api/reimbursements")
+                        .hasAnyRole("EMPLOYEE", "MANAGER")
+
+                    .requestMatchers(HttpMethod.PATCH, "/api/reimbursements/{id}")
+                        .hasAnyRole("EMPLOYEE", "MANAGER")
+                    .requestMatchers(HttpMethod.PATCH, "/api/reimbursements/{id}/status")
+                        .hasRole("MANAGER")
+
+                    .requestMatchers(HttpMethod.DELETE, "/api/reimbursements/{id}")
+                        .hasAnyRole("EMPLOYEE", "MANAGER")
+
+                    .requestMatchers(HttpMethod.GET, "/api/users/me")
+                        .hasAnyRole("EMPLOYEE", "MANAGER")
+
+                    .requestMatchers(HttpMethod.GET, "/api/users/**")
+                        .hasRole("MANAGER")
+
+                    .anyRequest().authenticated()
+
+                    //.anyRequest().permitAll()
+            ) //;
+            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

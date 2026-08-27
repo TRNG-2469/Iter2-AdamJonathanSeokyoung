@@ -11,6 +11,7 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Integer> {
     Optional<User> findByUsername(String username);
 
-    List<User> getUsersByDepartment(int id);
+    List<User> getUsersByDepartment_DepartmentId(int id);
 
+    //User findByUsername(String username);
 }

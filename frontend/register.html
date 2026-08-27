@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>ERS Register</title>
+        <link rel="stylesheet" href="css/registerstyle.css">
+        <script src="/js/register.js" defer></script>
+    </head>
+
+    <body>
+
+        <h1>Employee Reimbursement System</h1>
+
+        <h2>Register Account</h2>
+
+        <form id="registerForm">
+
+            <div class="entry">
+                <label for="username">Username:</label>
+                <input type="text" id="username" required>
+            </div>
+
+            <div class="entry">
+                <label for="password">Password:</label>
+                <input type="password" id="password" required>
+            </div>
+
+            <div class="entry">
+                <label for="firstName">First Name:</label>
+                <input type="text" id="firstName" required>
+            </div>
+
+            <div class="entry">
+                <label for="lastName">Last Name:</label>
+                <input type="text" id="lastName" required>
+            </div>
+
+            <div class="entry">
+                <label for="departmentId">Department ID:</label>
+                <input type="number" id="departmentId" min="1" required>
+            </div>
+
+            <div class="entry" id="radio">
+                <label>Role:</label>
+
+                <div>
+                    <input type="radio" id="employee" name="role" value="EMPLOYEE" checked>
+                    <label for="employee">Employee</label>
+                </div>
+
+                <div>
+                    <input type="radio" id="manager" name="role" value="MANAGER">
+                    <label for="manager">Manager</label>
+                </div>
+            </div>
+
+            <div class="entry">
+                <button type="submit">Register</button>
+            </div>
+
+        </form>
+
+        <p id="error"></p>
+
+        <a href="./index.html">
+            <button type="button">Back to Login</button>
+        </a>
+
+    </body>
+</html>

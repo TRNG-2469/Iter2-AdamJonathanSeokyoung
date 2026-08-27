@@ -1,9 +1,11 @@
 package com.revature.ERS2.controllers;
 
 import com.revature.ERS2.dtos.CreateUserDto;
+import com.revature.ERS2.dtos.responses.UserResponse;
 import com.revature.ERS2.models.User;
 import com.revature.ERS2.services.UserService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,23 +21,28 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public List<User> getAllUsers(
-            @RequestParam(required = false) Integer department_id){
+    public ResponseEntity<List<UserResponse>> getAllUsers(@RequestParam(required = false) Integer department_id){
         if(department_id != null){
-            return userService.getUsersByDepartment(department_id);
+            return ResponseEntity.ok(userService.getUsersByDepartment(department_id));
         }
-        return userService.getAllUsers();
+        return ResponseEntity.ok(userService.getAllUsers());
     }
 
     @GetMapping("/users/{id}")
-    public User getUserById(@PathVariable int id){
-        return userService.getUserById(id);
+    public ResponseEntity<UserResponse> getUserById(@PathVariable Integer id){
+        return ResponseEntity.ok(userService.getUserById(id));
     }
 
     @PostMapping("/users")
     public ResponseEntity<User> createUser(@RequestBody CreateUserDto u) {
         User createdUser = userService.createUser(u);
         return ResponseEntity.status(201).body(createdUser);
+    }
+
+    @GetMapping("/users/me")
+    public ResponseEntity<UserResponse> getLoggedInUser(Authentication authentication) {
+        String loggedInUsername = authentication.getName();
+        return ResponseEntity.ok(userService.getUserByUsername(loggedInUsername));
     }
 
 
