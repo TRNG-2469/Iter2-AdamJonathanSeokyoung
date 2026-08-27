@@ -1,32 +1,20 @@
 package com.revature.ERS2.services;
 
+import com.revature.ERS2.dtos.responses.UserResponse;
 import com.revature.ERS2.models.User;
 
 import java.util.List;
 
 public interface UserService {
 
-    /*User login(String username, String password); */
+    UserResponse getUserById(Integer userId);
+    UserResponse getUserByUsername(String username);
 
-    //TODO: ADAM
-    User getUserById(Integer userId);
-    User getUserByUsername(String username);
+    List<UserResponse> getAllUsers();
 
-    //TODO: jonathan
-    //added get all users for filtering
-    List<User> getAllUsers();
+    List<UserResponse> getUsersByDepartment(int departmentId);
 
-    //User getUserByEmail(String email); REMOVED EMAIL
-
-    //Department has multiple users, changed to list
-    List<User> getUsersByDepartment(int departmentId);
-
-    //TODO: Seoky DML
+    //TODO: Jonathan
     User createUser(User u);
-
-    //Update role?
-    //Delete user?
-    //OTHER CRUD
-    //updatre
 
 }

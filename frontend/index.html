@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width" initial-scale="1.0">
+        <script src="./js/login.js" defer></script>
+        <link rel="stylesheet" href="./css/loginstyle.css">
+
+        <title>ERS Login</title>
+    </head>
+    <body>
+
+        <h1>Employee Reimbursement System</h1>
+
+        <h2>Login</h2>
+
+        <form id="loginForm">
+            <div class="entry">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required placeholder="John Doe">
+            </div>
+
+            <div class="entry">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <div class="entry">
+                <button type="submit">Login</button>
+            </div>
+
+        </form>
+
+        <p id="error"></p>
+
+        <a href="./register.html" class="button">Register Account</a>
+
+    </body>
+</html>

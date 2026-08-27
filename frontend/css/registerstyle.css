@@ -1,0 +1,16 @@
+form {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    gap: 10px;
+}
+
+.entry {
+    width: 10rem;
+}
+
+#radio {
+    display: flex;
+    flex-direction: column;
+    width: 10rem;
+}

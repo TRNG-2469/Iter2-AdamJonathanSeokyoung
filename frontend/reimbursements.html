@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reimbursements</title>
+    <script type="module" src="./js/reimbursementPage/dashboard.js" defer></script>
+    <link rel="stylesheet" href="./css/reimbursementsstyles.css">
+</head>
+    <body>
+
+    <h1>Employee Reimbursement System</h1>
+
+    <p>
+        Logged in as:
+        <strong id="username"></strong>
+        (<span id="role"></span>)
+    </p>
+
+    <hr>
+
+    <h2>Reimbursements</h2>
+
+    <form id="filterForm">
+        <label for="status">Status:</label>
+
+        <select id="status">
+            <option value="">All</option>
+            <option value="PENDING">Pending</option>
+            <option value="APPROVED">Approved</option>
+            <option value="DENIED">Denied</option>
+        </select>
+
+        <span id="departmentFilter" hidden>
+            <label for="department">Department:</label>
+
+            <select id="department">
+                <option value="">All</option>
+                <option value="1">Department 1</option>
+                <option value="2">Department 2</option>
+                <option value="3">Department 3</option>\
+                <option value="4">Department 4</option>
+                <option value="5">Department 5</option>
+
+            </select>
+        </span>
+
+        <button type="submit">Filter</button>
+    </form>
+
+    <button id="createReimbursementButton">Create Reimbursement</button>
+
+    <button id="historyButton" hidden>Reimbursement History</button>
+
+    <ul id="reimbursements"></ul>
+
+    <p id="error"></p>
+
+    <button id="logout">Logout</button>
+
+    </body>
+</html>
