@@ -4,8 +4,9 @@ import {
     logout,
     resolveReimbursement,
     deleteReimbursement,
-    createReimbursement
-    editReimbursement
+    createReimbursement,
+    editReimbursement,
+    getDepartments
 } from "./api.js";
 
 import {
@@ -355,6 +356,34 @@ async function loadCurrentUser() {
     return true;
 }
 
+
+//LOADING FUNCTIONS
+async function loadDepartments() {
+    const response = await getDepartments();
+
+    if (!response) {
+        return;
+    }
+
+    if (!response.ok) {
+        showError("Could not load departments");
+        return;
+    }
+
+    const departments = await response.json();
+
+    const departmentSelect = document.getElementById("department");
+
+    for (const department of departments) {
+        const option = document.createElement("option");
+
+        option.value = department.departmentId;
+        option.textContent = `${department.departmentName} (ID: ${department.departmentId})`;
+
+        departmentSelect.appendChild(option);
+    }
+}
+
 async function loadReimbursements(endpoint = "/reimbursements") {
     const response = await getReimbursements(endpoint);
 
@@ -394,6 +423,11 @@ async function initializePage() {
 
     if (!loggedIn) {
         return;
+    }
+
+    //changed hardcoded departments to ones we have seen
+    if (currentUser.role === "MANAGER") {
+        await loadDepartments();
     }
 
     await loadReimbursements();
