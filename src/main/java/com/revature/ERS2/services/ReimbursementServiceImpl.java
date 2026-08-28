@@ -207,6 +207,18 @@ public class ReimbursementServiceImpl implements ReimbursementService {
             return transformReimbursementToResponse(savedReimbursement);
     }
 
+    @Override
+    public List<ReimbursementResponse> getManagerOwnedReimbursements(String username) {
+        User manager = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException(username));
+
+        List<Reimbursement> reimbursements =
+                reimbursementRepository.findByAuthor_Id(manager.getId());
+
+        return transformReimbursementToResponse(reimbursements);
+    }
+
+
     /**
      * Transforms a reimbursement to a reimbursement response
      * (Does not expose user details)

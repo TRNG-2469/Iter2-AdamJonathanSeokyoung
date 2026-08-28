@@ -4,11 +4,12 @@
 }
 
 #title {
+    color: white;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
-    background-image: url(../resources/generic-background.jpg);
+    background-image: url(../resources/generic-background-2.jpg);
     background-size: cover;
 }
 
@@ -24,7 +25,7 @@ form {
     align-content: center;
     font-size: 1.5em;
     gap: 10px;
-    padding: 2rem 1rem 1rem 1rem;
+    padding: 4rem 2rem 2rem 2rem;
     border-radius: 25px;
     box-shadow: 8px 6px black;
     background-color: #fff;
@@ -49,7 +50,6 @@ form {
 }
 
 #registerButton {
-    margin-top: 2rem;
     padding: 10px 20px;
     background-color: #2563eb;
     color: white;
@@ -69,8 +69,15 @@ form {
 
 #loginLink {
     text-decoration: none;
-    color: blue;
+    color: white;
     font-size: 1.4rem;
+    margin-top: 0.8rem;
+}
+
+#error {
+    color: red;
+    font-size: 0.9rem;
+    text-align: center;
 }
 
 #department {

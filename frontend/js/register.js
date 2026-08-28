@@ -20,10 +20,10 @@ document.querySelector("#registerForm").addEventListener("submit", async (event)
     if (response.ok) {
         window.location.href = "index.html";
     } else {
-        const error = await response.json();
+        const error = await response.text();
 
-        document.querySelector("#error").textContent =
-            error.error || "Registration failed";
+        const errSelected = document.querySelector("#error"); 
+        errSelected.textContent = error || "Registration failed"; 
     }
 });
 

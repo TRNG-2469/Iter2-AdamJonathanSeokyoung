@@ -78,7 +78,9 @@ function createActionButtons(r, currentUser) {
 
     if (
         currentUser.role === "MANAGER" &&
-        r.status === "PENDING"
+        r.status === "PENDING" &&
+        r.authorId !== currentUser.id
+
     ) {
         actions.appendChild(
             createActionButton("Approve", "approve", r.id)

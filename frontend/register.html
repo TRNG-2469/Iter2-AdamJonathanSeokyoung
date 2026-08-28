@@ -17,22 +17,22 @@
 
                 <div class="entry">
                     <label for="firstName">First Name:</label>
-                    <input type="text" id="firstName" required>
+                    <input type="text" id="firstName" max="50" required>
                 </div>
 
                 <div class="entry">
                     <label for="lastName">Last Name:</label>
-                    <input type="text" id="lastName" required>
+                    <input type="text" id="lastName" max="50" required>
                 </div>
 
                 <div class="entry">
                     <label for="username">Username:</label>
-                    <input type="text" id="username" required>
+                    <input type="text" id="username" max="30" required>
                 </div>
 
                 <div class="entry">
                     <label for="password">Password:</label>
-                    <input type="password" id="password" required>
+                    <input type="password" id="password" max="50" required>
                 </div>
 
                 <div class="entry">
@@ -42,14 +42,14 @@
                     </select>
                 </div>
 
-    
+                <p id="error"></p>
+                
                 <div class="entry">
                     <button type="submit" id="registerButton">Register</button>
                 </div>
 
             </form>
 
-            <p id="error"></p>
 
             <a href="./index.html" id="loginLink">
                 Back to Login

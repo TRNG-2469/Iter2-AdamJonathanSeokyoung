@@ -16,6 +16,8 @@ public interface ReimbursementService {
     ReimbursementResponse getReimbursementById(int reimbursementID);
     List<ReimbursementResponse> getReimbursementHistory();
 
+    List<ReimbursementResponse> getManagerOwnedReimbursements(String username);
+
     List<ReimbursementResponse> getReimbursements(ReimbursementStatus status, Integer departmentId, String username);
     List<ReimbursementResponse> getReimbursementsByStatus(ReimbursementStatus status);
     List<ReimbursementResponse> getReimbursementsByDepartment(Integer departmentId);
