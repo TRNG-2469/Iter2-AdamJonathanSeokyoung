@@ -93,6 +93,13 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- Swagger UI -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>3.1.0</version>
+        </dependency>
+
         <!-- Spring Security dependency and JWT -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
