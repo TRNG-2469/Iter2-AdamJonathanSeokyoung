@@ -69,3 +69,14 @@ export function resolveReimbursement(id, status) {
         })
     });
 }
+
+export function editReimbursement(id, amount, description, type) {
+    return apiFetch(`/reimbursements/${id}`, {
+        method: "PATCH",
+        body: JSON.stringify({
+            amount: amount,
+            description: description,
+            type: type
+        })
+    });
+}
