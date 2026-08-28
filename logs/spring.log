@@ -861,3 +861,16 @@
 2026-08-28 01:24:05 [http-nio-8081-exec-2] INFO  c.r.E.s.ReimbursementServiceImpl - Reimbursement 21 updated by 'usernamem', amount=21323, type=FOOD
 2026-08-28 01:24:07 [http-nio-8081-exec-5] INFO  c.r.E.s.ReimbursementServiceImpl - Reimbursement 21 deleted by 'usernamem'
 2026-08-28 01:24:14 [http-nio-8081-exec-10] INFO  c.r.E.s.ReimbursementServiceImpl - Reimbursement 25 created by 'usernamem', amount=123, type=TRAVEL
+2026-08-28 01:27:48 [http-nio-8081-exec-1] INFO  c.r.E.s.ReimbursementServiceImpl - Reimbursement 26 created by 'usernamem', amount=23.12, type=FOOD
+2026-08-28 01:28:16 [http-nio-8081-exec-1] INFO  c.r.ERS2.controllers.AuthController - User 'usernamem' logged in successfully
+2026-08-28 01:37:24 [http-nio-8081-exec-5] INFO  c.r.E.s.ReimbursementServiceImpl - Reimbursement 27 created by 'usernamem', amount=123, type=TRAVEL
+2026-08-28 01:37:30 [http-nio-8081-exec-8] INFO  c.r.E.s.ReimbursementServiceImpl - Reimbursement 26 updated by 'usernamem', amount=23.12, type=FOOD
+2026-08-28 01:37:34 [http-nio-8081-exec-10] INFO  c.r.E.s.ReimbursementServiceImpl - Reimbursement 26 updated by 'usernamem', amount=23.12, type=FOOD
+2026-08-28 01:40:12 [http-nio-8081-exec-7] INFO  c.r.E.s.ReimbursementServiceImpl - Reimbursement 26 updated by 'usernamem', amount=23.12, type=FOOD
+2026-08-28 01:58:56 [http-nio-8081-exec-10] INFO  c.r.ERS2.controllers.AuthController - User 'usernamem' logged in successfully
+2026-08-28 02:10:34 [http-nio-8081-exec-2] INFO  c.r.E.s.ReimbursementServiceImpl - Reimbursement 27 updated by 'usernamem', amount=123.00, type=TRAVEL
+2026-08-28 02:10:44 [http-nio-8081-exec-5] INFO  c.r.E.s.ReimbursementServiceImpl - Reimbursement 27 updated by 'usernamem', amount=1232.10, type=TRAVEL
+2026-08-28 02:10:49 [http-nio-8081-exec-7] INFO  c.r.E.s.ReimbursementServiceImpl - Reimbursement 27 updated by 'usernamem', amount=111, type=TRAVEL
+2026-08-28 02:15:39 [http-nio-8081-exec-2] INFO  c.r.E.s.ReimbursementServiceImpl - Reimbursement 26 updated by 'usernamem', amount=23.12, type=FOOD
+2026-08-28 02:15:42 [http-nio-8081-exec-5] INFO  c.r.E.s.ReimbursementServiceImpl - Reimbursement 26 updated by 'usernamem', amount=23.12, type=TRANSPORTATION
+2026-08-28 02:15:46 [http-nio-8081-exec-7] INFO  c.r.E.s.ReimbursementServiceImpl - Reimbursement 26 updated by 'usernamem', amount=23.12, type=OTHER

@@ -22,12 +22,19 @@ function createReimbursementElement(r, currentUser) {
     id.textContent = `RID: ${r.id}`;
 
     const status = document.createElement("div");
-    status.classList.add("reimbursement-status");
     status.textContent = r.status;
+
+    status.classList.add(
+        "reimbursement-status",
+        `status-${r.status.toLowerCase()}`
+    );
 
     const amount = document.createElement("div");
     amount.classList.add("reimbursement-amount");
-    amount.textContent = `$${r.amount}`;
+    amount.textContent = Number(r.amount).toLocaleString("en-US", {
+    style: "currency",
+    currency: "USD"
+    });
 
     const type = document.createElement("div");
     type.classList.add("reimbursement-type");

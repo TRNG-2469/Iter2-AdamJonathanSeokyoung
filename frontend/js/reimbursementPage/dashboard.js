@@ -231,10 +231,14 @@ function showEditOptions(button) {
 
     typeLabel.appendChild(typeSelect);
 
+    const buttonContainer = document.createElement("div");
+
     // Save button
     const saveButton = document.createElement("button");
     saveButton.type = "button";
     saveButton.textContent = "Save";
+    saveButton.classList.add("saveButton");
+    buttonContainer.appendChild(saveButton);
 
     saveButton.addEventListener("click", async () => {
         await handleEdit(button);
@@ -244,6 +248,8 @@ function showEditOptions(button) {
     const cancelButton = document.createElement("button");
     cancelButton.type = "button";
     cancelButton.textContent = "Cancel";
+    cancelButton.classList.add("cancelButton");
+    buttonContainer.appendChild(cancelButton);
 
     cancelButton.addEventListener("click", () => {
         editContainer.remove();
@@ -252,13 +258,9 @@ function showEditOptions(button) {
     // Add elements to edit container
     editContainer.append(
         amountLabel,
-        document.createElement("br"),
         descriptionLabel,
-        document.createElement("br"),
         typeLabel,
-        document.createElement("br"),
-        saveButton,
-        cancelButton
+        buttonContainer
     );
 
     reimbursementElement.appendChild(editContainer);
