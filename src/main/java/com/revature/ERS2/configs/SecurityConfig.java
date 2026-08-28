@@ -76,7 +76,11 @@ public class SecurityConfig {
                     .requestMatchers(HttpMethod.GET, "/api/users/**")
                         .hasRole("MANAGER")
 
-                    .anyRequest().authenticated()
+                    .requestMatchers(HttpMethod.GET, "/api/departments")
+                        .permitAll()
+
+
+                            .anyRequest().authenticated()
 
                     //.anyRequest().permitAll()
             ) //;

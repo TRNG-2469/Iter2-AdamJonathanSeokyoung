@@ -9,9 +9,5 @@ public class QuickPasswordEncoder {
         String password = "password123";
         String hash = passwordEncoder.encode(password);
         System.out.println(hash);
-
-        String passwordm = "passwordm";
-        String hashm = passwordEncoder.encode(passwordm);
-        System.out.println(hashm);
     }
 }

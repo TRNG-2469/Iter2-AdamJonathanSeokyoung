@@ -4,67 +4,57 @@
         <meta charset="UTF-8">
         <title>ERS Register</title>
         <link rel="stylesheet" href="css/registerstyle.css">
-        <script src="/js/register.js" defer></script>
+        <script src="./js/register.js" defer></script>
     </head>
 
     <body>
 
-        <h1>Employee Reimbursement System</h1>
+        <div class = "contentContainer">
 
-        <h2>Register Account</h2>
+            <h2 id="title">Register Account</h2>
 
-        <form id="registerForm">
+            <form id="registerForm">
 
-            <div class="entry">
-                <label for="username">Username:</label>
-                <input type="text" id="username" required>
-            </div>
-
-            <div class="entry">
-                <label for="password">Password:</label>
-                <input type="password" id="password" required>
-            </div>
-
-            <div class="entry">
-                <label for="firstName">First Name:</label>
-                <input type="text" id="firstName" required>
-            </div>
-
-            <div class="entry">
-                <label for="lastName">Last Name:</label>
-                <input type="text" id="lastName" required>
-            </div>
-
-            <div class="entry">
-                <label for="departmentId">Department ID:</label>
-                <input type="number" id="departmentId" min="1" required>
-            </div>
-
-            <div class="entry" id="radio">
-                <label>Role:</label>
-
-                <div>
-                    <input type="radio" id="employee" name="role" value="EMPLOYEE" checked>
-                    <label for="employee">Employee</label>
+                <div class="entry">
+                    <label for="firstName">First Name:</label>
+                    <input type="text" id="firstName" max="50" required>
                 </div>
 
-                <div>
-                    <input type="radio" id="manager" name="role" value="MANAGER">
-                    <label for="manager">Manager</label>
+                <div class="entry">
+                    <label for="lastName">Last Name:</label>
+                    <input type="text" id="lastName" max="50" required>
                 </div>
-            </div>
 
-            <div class="entry">
-                <button type="submit">Register</button>
-            </div>
+                <div class="entry">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" max="30" required>
+                </div>
 
-        </form>
+                <div class="entry">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" max="50" required>
+                </div>
 
-        <p id="error"></p>
+                <div class="entry">
+                    <label for="department">Department:</label>
+                    <select id="department" name="department" required>
+                        <option value="">Select Department</option>
+                    </select>
+                </div>
 
-        <a href="./index.html">
-            <button type="button">Back to Login</button>
-        </a>
+                <p id="error"></p>
+                
+                <div class="entry">
+                    <button type="submit" id="registerButton">Register</button>
+                </div>
+
+            </form>
+
+
+            <a href="./index.html" id="loginLink">
+                Back to Login
+            </a>
+        </div>
 
     </body>
 </html>

@@ -22,6 +22,13 @@ public class ReimbursementController {
         this.reimbursementService = reimbursementService;
     }
 
+    @GetMapping("/reimbursements/own")
+    public List<ReimbursementResponse> getManagerOwnedReimbursements(Authentication authentication) {
+        String username = authentication.getName();
+
+        return reimbursementService.getManagerOwnedReimbursements(username);
+    }
+
     @GetMapping("/reimbursements/{id}")
     public ReimbursementResponse getReimbursementById(@PathVariable int id){
         return reimbursementService.getReimbursementById(id);

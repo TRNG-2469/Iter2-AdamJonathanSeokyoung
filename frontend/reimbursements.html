@@ -35,12 +35,6 @@
 
             <select id="department">
                 <option value="">All</option>
-                <option value="1">Department 1</option>
-                <option value="2">Department 2</option>
-                <option value="3">Department 3</option>\
-                <option value="4">Department 4</option>
-                <option value="5">Department 5</option>
-
             </select>
         </span>
 
@@ -48,6 +42,7 @@
     </form>
 
     <button id="createReimbursementButton">Create Reimbursement</button>
+
     <form id="createReimbursementForm" hidden>
         <div class="entry">
             <label for="amount">Amount:$</label>
@@ -78,6 +73,10 @@
     </form>
 
     <button id="historyButton" hidden>Reimbursement History</button>
+
+    <button id="ownReimbursementsButton" hidden>
+        See Own Reimbursements
+    </button>
 
     <ul id="reimbursements"></ul>
 

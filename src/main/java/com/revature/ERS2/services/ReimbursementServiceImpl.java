@@ -34,7 +34,6 @@ public class ReimbursementServiceImpl implements ReimbursementService {
         this.userRepository = userRepository;
     }
 
-
     @Override
     public List<ReimbursementResponse> getAllReimbursements() {
         return transformReimbursementToResponse(reimbursementRepository.findAll());
@@ -207,6 +206,18 @@ public class ReimbursementServiceImpl implements ReimbursementService {
             log.info("Reimbursement {} resolved by '{}'", savedReimbursement.getId(), username);
             return transformReimbursementToResponse(savedReimbursement);
     }
+
+    @Override
+    public List<ReimbursementResponse> getManagerOwnedReimbursements(String username) {
+        User manager = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException(username));
+
+        List<Reimbursement> reimbursements =
+                reimbursementRepository.findByAuthor_Id(manager.getId());
+
+        return transformReimbursementToResponse(reimbursements);
+    }
+
 
     /**
      * Transforms a reimbursement to a reimbursement response

@@ -9,31 +9,37 @@
         <title>ERS Login</title>
     </head>
     <body>
+        <div class="contentContainer">
 
-        <h1>Employee Reimbursement System</h1>
+            <h1 id="titleE">Employee Reimbursement System</h1>
 
-        <h2>Login</h2>
+            <h2>Login</h2>
 
-        <form id="loginForm">
-            <div class="entry">
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username" required placeholder="John Doe">
-            </div>
+            <form id="loginForm">
+                <div class="entry">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" required placeholder="John Doe">
+                </div>
 
-            <div class="entry">
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
-            </div>
+                <div class="entry">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
 
-            <div class="entry">
-                <button type="submit">Login</button>
-            </div>
+                <p id="error"></p>
 
-        </form>
+                <div class="entry">
+                    <button type="submit" id="loginButton">Login</button>
+                </div>
 
-        <p id="error"></p>
+                <p id="caption">No account?
+                    <a href="./register.html" id="registerLink">Sign up</a>
+                </p>
 
-        <a href="./register.html" class="button">Register Account</a>
+            </form>
+
+
+        </div>
 
     </body>
 </html>

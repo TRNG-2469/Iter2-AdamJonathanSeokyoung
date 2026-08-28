@@ -1,5 +1,6 @@
 package com.revature.ERS2.exceptions;
 
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -16,6 +17,19 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<String> handleConstraintViolationException(ConstraintViolationException ex) {
+        String message = ex.getConstraintViolations()
+                .stream()
+                .findFirst()
+                .map(violation -> violation.getMessage())
+                .orElse("Validation failed");
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(message);
+    }
 
     @ExceptionHandler(ForbiddenException.class)
     public ResponseEntity<String> handleForbiddenException(ForbiddenException ex) {
