@@ -10,6 +10,7 @@ import com.revature.ERS2.models.Role;
 import com.revature.ERS2.models.User;
 import com.revature.ERS2.repositories.DepartmentRepository;
 import com.revature.ERS2.repositories.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ import java.util.Optional;
 
 import java.util.List;
 
+@Slf4j
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -77,7 +79,12 @@ public class UserServiceImpl implements UserService {
         u.setDepartment(department);
         u.setRole(Role.EMPLOYEE); // explicit default
 
+        if (userRepository.existsByUsername(dto.getUsername())) {
+            throw new IllegalArgumentException("Username already exists");
+        }
+
         User savedUser = userRepository.save(u);
+        log.info("User {} created with role '{}'", savedUser.getId(), savedUser.getRole());
         return transformUserToResponse(savedUser);
     }
 
@@ -85,8 +92,18 @@ public class UserServiceImpl implements UserService {
      * Helper method to make user objects into responses (cuts password, only returns department id)
      */
     public static UserResponse transformUserToResponse(User u) {
+
+        Department d = u.getDepartment();
+        Integer deptId;
+
+        if (d == null) {
+            deptId = null;
+        } else {
+            deptId = d.getDepartmentId();
+        }
+
         return new UserResponse(u.getId(), u.getFirstName(), u.getFirstName(), u.getUsername(),
-            u.getRole(), u.getDepartment().getDepartmentId()
+            u.getRole(), deptId
         );
     }
 

@@ -49,7 +49,40 @@
 
     <button id="createReimbursementButton">Create Reimbursement</button>
 
+    <form id="createReimbursementForm" hidden>
+        <div class="entry">
+            <label for="amount">Amount:</label>
+            <input type="number" id="amount" name="amount" step="0.01" min="0.01" max="999999" required>
+        </div>
+
+        <div class="entry">
+            <label for="type">Type:</label>
+            <select id="type" name="type" required>
+                <option value="TRAVEL">Travel</option>
+                <option value="FOOD">Food</option>
+                <option value="LODGING">Lodging</option>
+                <option value="MEDICAL">Medical</option>
+                <option value="TRANSPORTATION">Transportation</option>
+                <option value="OTHER">Other</option>
+            </select>
+        </div>
+
+        <div class="entry">
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" maxlength="255"></textarea>
+        </div>
+
+        <div class="entry">
+            <button type="submit">Submit</button>
+            <button type="button" id="cancelCreateReimbursement">Cancel</button>
+        </div>
+    </form>
+
     <button id="historyButton" hidden>Reimbursement History</button>
+
+    <button id="ownReimbursementsButton" hidden>
+        See Own Reimbursements
+    </button>
 
     <ul id="reimbursements"></ul>
 

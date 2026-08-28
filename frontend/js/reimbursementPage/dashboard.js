@@ -4,6 +4,7 @@ import {
     logout,
     resolveReimbursement,
     deleteReimbursement,
+    createReimbursement
     editReimbursement
 } from "./api.js";
 
@@ -16,6 +17,10 @@ const historyBtn = document.getElementById("historyButton");
 const filterForm = document.getElementById("filterForm");
 const errorElement = document.getElementById("error");
 const reimbursementList = document.getElementById("reimbursements");
+const createBtn = document.getElementById("createReimbursementButton");
+const createForm = document.getElementById("createReimbursementForm");
+const cancelCreateBtn = document.getElementById("cancelCreateReimbursement");
+const viewOwnReimbursementsBtn = document.getElementById("ownReimbursementsButton");
 
 let currentUser;
 
@@ -48,6 +53,30 @@ async function handleDelete(id) {
     }
 
     await loadReimbursements();
+}
+async function handleCreateReimbursement(event) {
+    event.preventDefault();
+
+    const data = {
+        amount: Number(document.getElementById("amount").value),
+        type: document.getElementById("type").value,
+        description: document.getElementById("description").value
+    };
+    const response = await createReimbursement(data);
+
+    if (!response) { //request failed auth
+        return;
+    }
+    if (!response.ok) { //unknown error
+        const error = await response.json();
+        showError(error.error || "Could not create reimbursement");
+        return;
+    }
+
+    createForm.reset();
+    createForm.hidden = true;
+    await loadReimbursements();
+
 }
 
 async function handleEdit(button) {
@@ -261,6 +290,21 @@ historyBtn.addEventListener("click", async () => {
     await loadReimbursements("/reimbursements/history");
 });
 
+viewOwnReimbursementsBtn.addEventListener("click", async () => {
+    await loadReimbursements(`/reimbursements/own`);
+})
+
+createBtn.addEventListener("click", () => {
+    createForm.hidden = !createForm.hidden;
+});
+
+cancelCreateBtn.addEventListener("click", () => {
+    createForm.reset();
+    createForm.hidden = true;
+});
+
+createForm.addEventListener("submit", handleCreateReimbursement);
+
 filterForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
@@ -335,6 +379,7 @@ function configureDashboard() {
     const isManager = currentUser.role === "MANAGER";
 
     historyBtn.hidden = !isManager;
+    viewOwnReimbursementsBtn.hidden = !isManager;
 
     document.getElementById("departmentFilter").hidden =
         !isManager;
