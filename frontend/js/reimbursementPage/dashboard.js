@@ -19,6 +19,7 @@ const reimbursementList = document.getElementById("reimbursements");
 const createBtn = document.getElementById("createReimbursementButton");
 const createForm = document.getElementById("createReimbursementForm");
 const cancelCreateBtn = document.getElementById("cancelCreateReimbursement");
+const viewOwnReimbursementsBtn = document.getElementById("ownReimbursementsButton");
 
 let currentUser;
 
@@ -99,6 +100,11 @@ logoutBtn.addEventListener("click", logout);
 historyBtn.addEventListener("click", async () => {
     await loadReimbursements("/reimbursements/history");
 });
+
+viewOwnReimbursementsBtn.addEventListener("click", async () => {
+    await loadReimbursements(`/reimbursements/own`);
+})
+
 createBtn.addEventListener("click", () => {
     createForm.hidden = !createForm.hidden;
 });
@@ -184,6 +190,7 @@ function configureDashboard() {
     const isManager = currentUser.role === "MANAGER";
 
     historyBtn.hidden = !isManager;
+    viewOwnReimbursementsBtn.hidden = !isManager;
 
     document.getElementById("departmentFilter").hidden =
         !isManager;

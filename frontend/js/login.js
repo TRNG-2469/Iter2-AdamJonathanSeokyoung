@@ -1,8 +1,6 @@
 document.querySelector("#loginForm").addEventListener("submit", async (event) => {
     event.preventDefault();
 
-    console.log("FORM SUBMITTED");
-
     const username = document.querySelector("#username").value;
     const password = document.querySelector("#password").value;
 
@@ -24,8 +22,8 @@ document.querySelector("#loginForm").addEventListener("submit", async (event) =>
         localStorage.setItem("token", data.token);
         window.location.href = "reimbursements.html";
     } else {
-        const error = await response.json();
+        const error = await response.text();
         document.querySelector("#error").textContent =
-            error.error || "Login failed";
+            error || "Login failed";
     }
 });
