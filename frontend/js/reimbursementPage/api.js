@@ -80,3 +80,7 @@ export function editReimbursement(id, amount, description, type) {
         })
     });
 }
+
+export function getDepartments() {
+    return apiFetch(`/departments`);
+}
